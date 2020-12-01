@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.RegisterFragment">
+
+        <TextView
+            android:id="@+id/registerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="serif"
+            android:text="Register"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/registerUsernameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:fontFamily="serif"
+            android:hint="Username"
+            android:textCursorDrawable="@color/itemColor"
+            android:backgroundTint="@color/itemColor"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="@+id/registerTitle"
+            app:layout_constraintStart_toStartOf="@+id/registerTitle"
+            app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
+
+        <EditText
+            android:id="@+id/registerEmailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="@color/itemColor"
+            android:ems="10"
+            android:fontFamily="serif"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:textCursorDrawable="@color/itemColor"
+            app:layout_constraintEnd_toEndOf="@+id/registerUsernameText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/registerUsernameText"
+            app:layout_constraintTop_toBottomOf="@+id/registerUsernameText" />
+
+        <EditText
+            android:id="@+id/registerPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textCursorDrawable="@color/itemColor"
+            app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/registerEmailText"
+            app:layout_constraintTop_toBottomOf="@+id/registerEmailText"
+            />
+
+        <EditText
+            android:id="@+id/registerPasswordAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Password again"
+            android:backgroundTint="@color/itemColor"
+            android:textCursorDrawable="@color/itemColor"
+            app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/registerEmailText"
+            app:layout_constraintTop_toBottomOf="@+id/registerEmailText"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/registerButton"
+            android:layout_width="149dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/button_layout"
+            android:fontFamily="serif"
+            android:text="REGISTER"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/registerPasswordAgain"
+            app:layout_constraintStart_toStartOf="@+id/registerPasswordAgain"
+            app:layout_constraintTop_toBottomOf="@+id/registerPasswordAgain" />
+
+        <TextView
+            android:id="@+id/toLoginText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="serif"
+            android:text="I already have an account"
+            app:layout_constraintEnd_toEndOf="@+id/registerButton"
+            app:layout_constraintStart_toStartOf="@+id/registerButton"
+            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/itemColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.247"
+            app:layout_constraintStart_toEndOf="@+id/registerButton"
+            app:layout_constraintTop_toBottomOf="@+id/registerPasswordAgain" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

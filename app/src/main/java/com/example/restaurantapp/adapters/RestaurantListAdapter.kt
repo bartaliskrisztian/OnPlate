@@ -1,8 +1,9 @@
-package com.example.restaurantapp.fragments.main
+package com.example.restaurantapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.model.Restaurant
@@ -27,11 +28,17 @@ class RestaurantListAdapter(private var restaurants: List<Restaurant>, private v
 
     override fun onBindViewHolder(holder: RestaurantListHolder, position: Int) {
         val currentItem = restaurants[position]
+        holder.itemView.findViewById<TextView>(R.id.listItemName).text = currentItem.name
     }
 
     override fun getItemCount(): Int = restaurants.size
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+    }
+
+    fun setData(pRestaurants: List<Restaurant>) {
+        restaurants = pRestaurants
+        notifyDataSetChanged()
     }
 }
