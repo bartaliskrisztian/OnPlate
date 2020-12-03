@@ -1,5 +1,6 @@
 package com.example.restaurantapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -70,15 +71,23 @@ class RegisterFragment : Fragment() {
         // if already exists a user with the given username or password
         userViewModel.usedUser.observe(viewLifecycleOwner, { user ->
             if(user == null) {
-                Log.d("-----", "$user")
-                val newUser = User(0, username, email, sha256(password))
+                val passwordHash = sha256(password)
+                val newUser = User(0, username, email, passwordHash)
+                val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                val sharedPrefEdit = sharedPref.edit()
+                sharedPrefEdit.clear()
+                sharedPrefEdit.putString("username", username)
+                sharedPrefEdit.putString("email", email)
+                sharedPrefEdit.putString("password", passwordHash)
+                sharedPrefEdit.apply()
+
                 userViewModel.addUser(newUser)
                 userViewModel.currentUser.value = newUser
+
                 Toast.makeText(context, "Successful registration", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_registerFragment_to_listFragment)
             }
             else{
-                Log.d("-----", "$user")
                 Toast.makeText(context, "Username or email is already taken", Toast.LENGTH_SHORT).show()
                 binding.progressCircular.visibility = View.GONE
             }})

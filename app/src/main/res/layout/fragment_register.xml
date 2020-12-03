@@ -59,6 +59,7 @@
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
+            android:backgroundTint="@color/itemColor"
             android:textCursorDrawable="@color/itemColor"
             app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
             app:layout_constraintHorizontal_bias="0.0"
@@ -70,17 +71,16 @@
             android:id="@+id/registerPasswordAgain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Password again"
+            android:layout_marginTop="32dp"
             android:backgroundTint="@color/itemColor"
+            android:ems="10"
+            android:hint="Password again"
+            android:inputType="textPassword"
             android:textCursorDrawable="@color/itemColor"
-            app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
+            app:layout_constraintEnd_toEndOf="@+id/registerPasswordText"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/registerEmailText"
-            app:layout_constraintTop_toBottomOf="@+id/registerEmailText"
-            />
+            app:layout_constraintStart_toStartOf="@+id/registerPasswordText"
+            app:layout_constraintTop_toBottomOf="@+id/registerPasswordText" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/registerButton"

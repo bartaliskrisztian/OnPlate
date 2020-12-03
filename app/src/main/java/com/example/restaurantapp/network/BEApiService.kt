@@ -1,10 +1,10 @@
 package com.example.restaurantapp.network
 
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.QueryMap
 
 private const val BASE_URL = "https://opentable.herokuapp.com/api/"
 
@@ -14,8 +14,12 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface BEApiService {
-    @GET("/api/restaurants?country=AW")
-    fun getRestaurants(): Call<ApiResponse>
+    @GET("/api/restaurants")
+    fun getRestaurants(@QueryMap params: Map<String, String>): Call<ApiRestaurantResponse>
+
+    @GET("/api/countries")
+    fun getCountries(): Call<ApiCountryResponse>
+
 }
 
 object BEApi {

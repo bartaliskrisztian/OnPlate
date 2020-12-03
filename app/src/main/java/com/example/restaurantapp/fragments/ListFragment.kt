@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,13 +40,41 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
            ViewModelProvider(this).get(RestaurantViewModel::class.java)
         }!!
 
-        /*
+        restaurantViewModel.countries.observe(viewLifecycleOwner) {
+            setupSpinner(it)
+        }   
+
         restaurantViewModel.restaurants.observe(viewLifecycleOwner, {
-            adapter.setData(it)
+            //adapter.setData(it)
+
         })
-        */
+
+        restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
+            Log.d("aaaaa", "$it")
+        }
+        restaurantViewModel.getRestaurantCount()
+
+        restaurantViewModel.currentCountry.observe(viewLifecycleOwner) {
+
+        }
+
 
         return binding.root
+    }
+
+    private fun setupSpinner(it: List<String>?) {
+        val spinner = binding.countrySpinner
+        spinner.prompt = "Country"
+        val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, it!!)
+        spinner.adapter = arrayAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     override fun onItemClick(position: Int) {

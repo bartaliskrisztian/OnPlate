@@ -16,4 +16,10 @@ interface RestaurantDao {
     @Query("SELECT * FROM restaurants")
     fun getRestaurants(): LiveData<List<Restaurant>>
 
+    @Query("SELECT COUNT(*) FROM restaurants")
+    fun getRestaurantCount(): Int
+
+    @Query("DELETE FROM restaurants")
+    suspend fun deleteRestaurants()
+
 }

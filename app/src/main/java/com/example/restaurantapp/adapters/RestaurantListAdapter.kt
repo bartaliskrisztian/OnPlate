@@ -28,7 +28,7 @@ class RestaurantListAdapter(private var restaurants: List<Restaurant>, private v
 
     override fun onBindViewHolder(holder: RestaurantListHolder, position: Int) {
         val currentItem = restaurants[position]
-        holder.itemView.findViewById<TextView>(R.id.listItemName).text = currentItem.name
+       // holder.itemView.findViewById<TextView>(R.id.listItemName).text = currentItem.name
     }
 
     override fun getItemCount(): Int = restaurants.size

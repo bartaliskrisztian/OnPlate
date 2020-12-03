@@ -6,11 +6,13 @@ import com.example.restaurantapp.model.Restaurant
 
 class RestaurantRepository(private val restaurantDao: RestaurantDao) {
 
-    val restaurants = restaurantDao.getRestaurants()
-
-    suspend fun addMultipleRestaurants(restaurants: LiveData<List<Restaurant>>) {
-        restaurants.value?.forEach{
+    suspend fun addMultipleRestaurants(restaurants: List<Restaurant>) {
+        restaurants.forEach{
             restaurantDao.addRestaurant(it)
         }
     }
+
+    fun getRestaurantCount(): Int = restaurantDao.getRestaurantCount()
+
+    fun getRestaurants(): LiveData<List<Restaurant>> = restaurantDao.getRestaurants()
 }

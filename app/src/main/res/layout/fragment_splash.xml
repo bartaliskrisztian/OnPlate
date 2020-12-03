@@ -22,4 +22,13 @@
         android:indeterminate="true"
         android:indeterminateTint="@color/itemColor"
         android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/loadingState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginTop="30dp"
+        android:textSize="16sp"
+        android:fontFamily="serif"/>
 </LinearLayout>
