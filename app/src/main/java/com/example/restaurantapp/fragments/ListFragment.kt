@@ -30,10 +30,13 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        binding.progressCircular.visibility = View.VISIBLE
+        binding.restaurantList.visibility = View.INVISIBLE
+
         recyclerView = binding.restaurantList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = RestaurantListAdapter(listOf(), this)
+        val adapter = RestaurantListAdapter(listOf(), this, binding.root.context)
         recyclerView.adapter = adapter
 
         restaurantViewModel = activity?.run {
@@ -45,19 +48,18 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         }   
 
         restaurantViewModel.restaurants.observe(viewLifecycleOwner, {
-            //adapter.setData(it)
-
+            restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(0)
         })
 
-        restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
-            Log.d("aaaaa", "$it")
-        }
-        restaurantViewModel.getRestaurantCount()
-
         restaurantViewModel.currentCountry.observe(viewLifecycleOwner) {
-
+            restaurantViewModel.loadRestaurantsByState()
         }
 
+        restaurantViewModel.restaurantsFromCountry.observe(viewLifecycleOwner) {
+            adapter.setData(it)
+            binding.progressCircular.visibility = View.GONE
+            binding.restaurantList.visibility = View.VISIBLE
+        }
 
         return binding.root
     }
@@ -70,6 +72,8 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                binding.progressCircular.visibility = View.VISIBLE
+                binding.restaurantList.visibility = View.INVISIBLE
                 restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(position)
             }
 

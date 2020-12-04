@@ -1,6 +1,7 @@
 package com.example.restaurantapp.db
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,7 +15,10 @@ interface RestaurantDao {
     suspend fun addRestaurant(restaurant: Restaurant)
 
     @Query("SELECT * FROM restaurants")
-    fun getRestaurants(): LiveData<List<Restaurant>>
+    suspend fun getRestaurants(): List<Restaurant>
+
+    @Query("SELECT * FROM restaurants WHERE country=:country")
+    suspend fun getRestaurantsByCountry(country: String): List<Restaurant>
 
     @Query("SELECT COUNT(*) FROM restaurants")
     fun getRestaurantCount(): Int

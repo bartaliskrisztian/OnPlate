@@ -21,11 +21,15 @@ import retrofit2.Response
 
 class RestaurantViewModel(application: Application): AndroidViewModel(application) {
     var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
+    var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var countries: MutableLiveData<List<String>> = MutableLiveData()
     var currentCountry: MutableLiveData<String> = MutableLiveData()
-    var dataIsLoaded: MutableLiveData<Boolean> = MutableLiveData()
-    val currentLoadingState: MutableLiveData<String> = MutableLiveData()
-    var restaurantCount: MutableLiveData<Int> = MutableLiveData()
+
+    val currentLoadingState: MutableLiveData<String> = MutableLiveData() // for splash feedback
+    var restaurantCount: MutableLiveData<Int> = MutableLiveData() // number of restaurants in db
+
+    var dataLoadedFromApi: MutableLiveData<Boolean> = MutableLiveData() // true if restaurants are downloaded from BE
+    var restaurantsLoaded: MutableLiveData<Boolean> = MutableLiveData() // true if 'restaurants' attribute is initialized from db
 
     private val repository: RestaurantRepository
 
@@ -33,6 +37,14 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         val restaurantDao = RestaurantDatabase.getDatabase(application).restaurantDao()
         repository = RestaurantRepository(restaurantDao)
     }
+
+     fun loadRestaurantsByState() {
+         viewModelScope.launch(Dispatchers.IO) {
+             if (currentCountry.value != null) {
+                 restaurantsFromCountry.postValue(repository.getRestaurantsByCountry(currentCountry.value!!))
+             }
+         }
+     }
 
      fun loadCountries() {
         viewModelScope.launch {
@@ -53,75 +65,72 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    fun loadRestaurants() {
-        val resultLoaded = MutableLiveData<Boolean>()
-        val restaurantsLoaded = MutableLiveData<List<Restaurant>>()
+     // downloads all restaurants from BE
+     fun loadRestaurantsFromApi() {
+         val result = MutableLiveData<Boolean>()
+
+         viewModelScope.launch(Dispatchers.IO) {
+             countries.value!!.forEach { country ->
+                 currentLoadingState.postValue(country)
+                 // set the query parameters of the url
+                 val params: MutableMap<String, String> = mutableMapOf()
+                 params["country"] = country
+                 params["per_page"] = "100"
+                 var ok = true
+                 var page = 1
+                 while (ok && country != "US") {
+                     val _page = page
+                     params["page"] = page.toString()
+                     BEApi.retrofitService.getRestaurants(params).enqueue(
+                             object : Callback<ApiRestaurantResponse> {
+                                 override fun onResponse(call: Call<ApiRestaurantResponse>, response: Response<ApiRestaurantResponse>) {
+                                     val res: ApiRestaurantResponse? = response.body()
+                                     if (res != null) {
+                                         if (res.restaurants.isEmpty()) {
+                                             ok = false
+                                         } else {
+                                             addMultipleRestaurants(res.restaurants)
+                                         }
+                                         /*
+                                    Log.d("aaaaa", "${res.restaurants}")
+                                    Log.d("aaaaa", "${res.restaurants.size}")
+                                    Log.d("aaaaa", "${response}")
+                                    Log.d("aaaaa", "----------------------")
+                                     */
+                                         ++page
+                                     }
+                                 }
+
+                                 override fun onFailure(call: Call<ApiRestaurantResponse>, t: Throwable) {
+                                     Log.d("aaaaa", "Failure" + t.message)
+                                 }
+                             })
+                     // wait for answer
+                     while (page != _page + 1) {
+                     }
+                 }
+             }
+             result.postValue(true)
+         }
+         dataLoadedFromApi = result
+    }
+
+    fun loadRestaurantsFromDatabase() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val count = repository.getRestaurantCount()
-            Thread.sleep(2000)
-            if(count == 0) {
-                loadRestaurantsFromApi()
-            }
-
-            //Log.d("aaaaa", "${repository.getRestaurants()}")
-            restaurantsLoaded.postValue(repository.getRestaurants().value)
-            resultLoaded.postValue(true)
-        }
-        Thread.sleep(5000)
-        restaurants.value = restaurantsLoaded.value
-        dataIsLoaded = resultLoaded
-    }
-
-    private fun loadRestaurantsFromApi() {
-        if(countries.value != null) {
-            countries.value!!.forEach { country ->
-                currentLoadingState.postValue(country)
-                val params: MutableMap<String, String> = mutableMapOf()
-                params["country"] = country
-                params["per_page"] = "100"
-                var ok = true
-                var page = 1
-                while (ok && country != "US") {
-                    val _page = page
-                    params["page"] = page.toString()
-                    BEApi.retrofitService.getRestaurants(params).enqueue(
-                            object: Callback<ApiRestaurantResponse> {
-                                override fun onResponse(call: Call<ApiRestaurantResponse>, response: Response<ApiRestaurantResponse>) {
-                                    val res: ApiRestaurantResponse? = response.body()
-                                    if(res != null) {
-                                        if(res.restaurants.isEmpty()) {
-                                            ok = false
-                                        }
-                                        else {
-                                            addMultipleRestaurants(res.restaurants)
-                                        }
-                                        /*
-                                        Log.d("aaaaa", "${res.restaurants}")
-                                        Log.d("aaaaa", "${res.restaurants.size}")
-                                        Log.d("aaaaa", "${response}")
-                                        Log.d("aaaaa", "----------------------")
-                                         */
-                                        ++page
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<ApiRestaurantResponse>, t: Throwable) {
-                                    Log.d("aaaaa", "Failure" + t.message)
-                                }
-                            })
-                    while (page != _page+1){}
-                }
-            }
+            restaurants.postValue(repository.getRestaurants())
+            restaurantsLoaded.postValue(true)
         }
     }
 
+    // adds multiple restaurants to the db
     fun addMultipleRestaurants(restaurants: List<Restaurant>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMultipleRestaurants(restaurants)
         }
     }
 
+    // gets the number of restaurants stored in db
     fun getRestaurantCount() {
         val result = MutableLiveData<Int>()
         viewModelScope.launch(Dispatchers.IO)

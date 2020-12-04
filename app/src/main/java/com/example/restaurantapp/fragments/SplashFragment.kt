@@ -37,16 +37,29 @@ class SplashFragment : Fragment() {
 
         loadUsers()
         loadCountries()
-        loadRestaurants()
+        getRestaurantCount()
+
+        restaurantViewModel.countries.observe(viewLifecycleOwner) {
+            restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
+                if(it == 0) {
+                    loadRestaurantsFromApi()
+                }
+                else {
+                    loadRestaurantsFromDatabase()
+                }
+            }
+        }
+
+        restaurantViewModel.dataLoadedFromApi.observe(viewLifecycleOwner) {
+            loadRestaurantsFromDatabase()
+        }
 
         restaurantViewModel.currentLoadingState.observe(viewLifecycleOwner) {
             view.findViewById<TextView>(R.id.loadingState).text = "...loading restaurants from state: $it"
         }
 
-        restaurantViewModel.dataIsLoaded.observe(viewLifecycleOwner) {
-            if (it) {
-                tryToLogin()
-            }
+        restaurantViewModel.restaurants.observe(viewLifecycleOwner) {
+            tryToLogin()
         }
 
     }
@@ -54,8 +67,10 @@ class SplashFragment : Fragment() {
 
 
     private fun loadCountries() = restaurantViewModel.loadCountries()
-    private fun loadRestaurants() = restaurantViewModel.loadRestaurants()
+    private fun loadRestaurantsFromApi() = restaurantViewModel.loadRestaurantsFromApi()
+    private fun loadRestaurantsFromDatabase() = restaurantViewModel.loadRestaurantsFromDatabase()
     private fun loadUsers() = userViewModel.loadUsers()
+    private fun getRestaurantCount() = restaurantViewModel.getRestaurantCount()
 
     private fun tryToLogin() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
