@@ -13,21 +13,26 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/restaurantImage"
-            android:layout_width="140dp"
-            android:layout_height="132dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_restaurant" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/restaurantImage"
+                android:layout_width="140dp"
+                android:layout_height="132dp"
+                app:srcCompat="@drawable/ic_restaurant" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/restaurantTitle"
-            android:layout_width="209dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="16dp"
             android:fontFamily="serif"
@@ -35,21 +40,23 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/restaurantImage"
+            app:layout_constraintStart_toEndOf="@+id/imageHolder"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/restaurantAddress"
-            android:layout_width="166dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:drawableLeft="@drawable/ic_address"
             android:drawablePadding="10dp"
             android:fontFamily="serif"
             android:gravity="center_vertical"
             android:text="Address"
-            app:layout_constraintStart_toEndOf="@+id/restaurantImage"
+            app:layout_constraintEnd_toStartOf="@+id/favoriteButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageHolder"
             app:layout_constraintTop_toBottomOf="@+id/restaurantPrice" />
 
         <TextView
@@ -57,25 +64,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:drawableLeft="@drawable/ic_price_tag"
             android:drawablePadding="10dp"
             android:fontFamily="serif"
             android:gravity="center_vertical"
             android:text="Price"
-            app:layout_constraintStart_toEndOf="@+id/restaurantImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageHolder"
             app:layout_constraintTop_toBottomOf="@+id/restaurantTitle" />
 
         <ImageButton
             android:id="@+id/favoriteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/restaurantAddress"
             app:srcCompat="@drawable/ic_heart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

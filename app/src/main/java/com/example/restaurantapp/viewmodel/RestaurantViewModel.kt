@@ -22,8 +22,18 @@ import retrofit2.Response
 class RestaurantViewModel(application: Application): AndroidViewModel(application) {
     var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData()
+    var filteredRestaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
+
+    // lists for spinner items
     var countries: MutableLiveData<List<String>> = MutableLiveData()
+    var currentCities: MutableLiveData<List<String>> = MutableLiveData()
+
+    // filters
     var currentCountry: MutableLiveData<String> = MutableLiveData()
+    var currentCity: MutableLiveData<String> = MutableLiveData()
+    var currentPrice: MutableLiveData<Int> = MutableLiveData()
+    var showFavorites: MutableLiveData<Boolean> = MutableLiveData()
+
 
     val currentLoadingState: MutableLiveData<String> = MutableLiveData() // for splash feedback
     var restaurantCount: MutableLiveData<Int> = MutableLiveData() // number of restaurants in db
@@ -38,11 +48,34 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         repository = RestaurantRepository(restaurantDao)
     }
 
-     fun loadRestaurantsByState() {
+    fun applyFilters() {
+        val result = MutableLiveData<List<Restaurant>>()
+
+        // filter by city
+        result.value = restaurantsFromCountry.value?.filter {
+            it.city == currentCity.value
+        }
+
+        // filter by price level
+        /*
+        result.value = result.value?.filter {
+            it.price == currentPrice.value
+        }
+         */
+        filteredRestaurants.value = result.value
+    }
+
+     fun loadCurrentCities() {
          viewModelScope.launch(Dispatchers.IO) {
              if (currentCountry.value != null) {
-                 restaurantsFromCountry.postValue(repository.getRestaurantsByCountry(currentCountry.value!!))
+                 currentCities.postValue(repository.getCitiesFromCountry(currentCountry.value!!))
              }
+         }
+     }
+
+     fun loadRestaurantsFromCountry() {
+         restaurantsFromCountry.value = restaurants.value?.filter {
+             it.country == currentCountry.value
          }
      }
 
@@ -106,8 +139,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                                  }
                              })
                      // wait for answer
-                     while (page != _page + 1) {
-                     }
+                     while (page != _page + 1) {}
                  }
              }
              result.postValue(true)

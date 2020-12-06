@@ -24,6 +24,12 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         repository = UserRepository(userDao)
     }
 
+    fun loadCurrentUser(username: String, email: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentUser.postValue(repository.getUserByUsernameOrEmail(username, email))
+        }
+    }
+
     fun loadUsers() {
         viewModelScope.launch(Dispatchers.IO) {
             users = repository.users

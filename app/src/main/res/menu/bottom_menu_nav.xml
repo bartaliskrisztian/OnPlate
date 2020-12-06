@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mainFragment"
+        android:id="@+id/listFragment"
         android:icon="?android:attr/actionModeFindDrawable"
         android:title="@string/restaurantMenuText"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/profileFragment"
-        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:icon="@drawable/ic_user"
         android:title="@string/profileMenuText"
         app:showAsAction="always" />
 </menu>

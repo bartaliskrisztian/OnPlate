@@ -5,7 +5,7 @@
     android:drawableTint="#FFFFFF"
     android:gravity="center"
     android:padding="5dp"
-    android:textColor="@color/itemColor"
-    android:textSize="20sp">
+    android:textColor="@color/appBackgroundColor"
+    android:textSize="16sp">
 
 </TextView>

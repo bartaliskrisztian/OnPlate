@@ -1,6 +1,9 @@
 package com.example.restaurantapp.fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +18,7 @@ import com.example.restaurantapp.R
 import com.example.restaurantapp.databinding.FragmentRegisterBinding
 import com.example.restaurantapp.model.User
 import com.example.restaurantapp.viewmodel.UserViewModel
+import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 
 
@@ -26,6 +30,10 @@ class RegisterFragment : Fragment() {
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var passwordAgain: String
+    private lateinit var address: String
+    private lateinit var phone_number: String
+    private lateinit var imageUri: Uri
+    private lateinit var imageByteArray: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +45,10 @@ class RegisterFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         binding.progressCircular.visibility = View.GONE
+
+        binding.addImageButton.setOnClickListener {
+            pickImageFromGallery()
+        }
 
         // when the user presses SIGN UP button
         binding.registerButton.setOnClickListener{
@@ -58,6 +70,17 @@ class RegisterFragment : Fragment() {
         email = binding.registerEmailText.text.toString()
         password = binding.registerPasswordText.text.toString()
         passwordAgain = binding.registerPasswordAgain.text.toString()
+        address = binding.registerUserAddressText.text.toString()
+        phone_number = binding.registerUserPhoneText.text.toString()
+
+        if(imageUri != null) {
+            val os = ByteArrayOutputStream()
+            val inputStream = activity?.contentResolver?.openInputStream(imageUri)
+            imageByteArray = inputStream!!.readBytes()
+        }
+        else {
+            imageByteArray = byteArrayOf()
+        }
 
         val format = validateFormat(username, email, password, passwordAgain)
 
@@ -72,7 +95,8 @@ class RegisterFragment : Fragment() {
         userViewModel.usedUser.observe(viewLifecycleOwner, { user ->
             if(user == null) {
                 val passwordHash = sha256(password)
-                val newUser = User(0, username, email, passwordHash)
+                val newUser = User(0, username, email, passwordHash, address, phone_number, imageByteArray)
+                Log.d("aaaaa", "$newUser")
                 val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
                 val sharedPrefEdit = sharedPref.edit()
                 sharedPrefEdit.clear()
@@ -93,6 +117,21 @@ class RegisterFragment : Fragment() {
             }})
 
         userViewModel.getUsersForRegistration(username, email)
+    }
+
+    private fun pickImageFromGallery() {
+        //Intent to pick image
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, 1000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            imageUri = data.data!!
+            binding.registerUserPicture.setImageURI(imageUri)
+        }
     }
 
     /**

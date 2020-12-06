@@ -25,40 +25,134 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/itemColor"
+                android:layout_height="107dp"
+                android:background="@color/darkBackground"
                 android:minHeight="?attr/actionBarSize"
 
                 android:theme="?attr/actionBarTheme"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/search_input"
+                app:layout_constraintHorizontal_bias="0.485"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_dish"
+                app:tint="@color/appBackgroundColor" />
 
             <EditText
                 android:id="@+id/search_input"
                 android:layout_width="272dp"
-                android:layout_height="34dp"
+                android:layout_height="32dp"
                 android:background="@drawable/search_background"
+                android:drawableRight="@android:drawable/ic_menu_search"
                 android:ems="10"
                 android:hint="Search"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.115"
+                app:layout_constraintHorizontal_bias="0.777"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.409" />
+                app:layout_constraintVertical_bias="0.219" />
+
+            <ImageView
+                android:id="@+id/countryFilterIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_country"
+                app:tint="@color/appBackgroundColor" />
 
             <Spinner
                 android:id="@+id/countrySpinner"
+                android:layout_width="40dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/search_background"
+                android:dropDownWidth="80dp"
+                android:dropDownHeight="200dp"
+                android:dropDownVerticalOffset="5dp"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/countryFilterIcon"
+                tools:listitem="@layout/spinner_item_layout" />
+
+            <ImageView
+                android:id="@+id/cityFilterIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.312"
+                app:layout_constraintStart_toEndOf="@+id/countrySpinner"
+                app:srcCompat="@drawable/ic_address"
+                app:tint="@color/appBackgroundColor" />
+
+            <Spinner
+                android:id="@+id/citySpinner"
+                android:layout_width="87dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/search_background"
+                android:dropDownHeight="200dp"
+                android:dropDownVerticalOffset="5dp"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cityFilterIcon" />
+
+            <ImageView
+                android:id="@+id/priceFilterIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/citySpinner"
+                app:srcCompat="@drawable/ic_price_tag"
+                app:tint="@color/appBackgroundColor" />
+
+            <Spinner
+                android:id="@+id/priceSpinner"
+                android:layout_width="37dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/search_background"
+                android:dropDownHeight="200dp"
+                android:dropDownVerticalOffset="5dp"
+                android:overlapAnchor="false"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/priceFilterIcon"
                 tools:listitem="@layout/spinner_item_layout" />
+
+            <ImageButton
+                android:id="@+id/favoriteFilterButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/search_background"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/priceSpinner"
+                app:srcCompat="@drawable/ic_heart" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -79,11 +173,12 @@
         android:id="@+id/restaurantList"
         android:layout_width="match_parent"
         android:layout_height="744dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        tools:listitem="@layout/restaurant_item_layout" />
+        tools:listitem="@layout/restaurant_item_layout" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

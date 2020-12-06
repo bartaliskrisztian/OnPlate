@@ -17,8 +17,11 @@ interface RestaurantDao {
     @Query("SELECT * FROM restaurants")
     suspend fun getRestaurants(): List<Restaurant>
 
-    @Query("SELECT * FROM restaurants WHERE country=:country")
-    suspend fun getRestaurantsByCountry(country: String): List<Restaurant>
+    @Query("SELECT DISTINCT city FROM restaurants WHERE country=:country")
+    suspend fun getCitiesFromCountry(country: String): List<String>
+
+    @Query("SELECT DISTINCT city FROM restaurants")
+    suspend fun getAllCities(): List<String>
 
     @Query("SELECT COUNT(*) FROM restaurants")
     fun getRestaurantCount(): Int

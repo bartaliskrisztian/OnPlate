@@ -46,4 +46,9 @@
         android:name="com.example.restaurantapp.fragments.ListFragment"
         android:label="ListFragment"
         tools:layout="@layout/fragment_list"/>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.restaurantapp.fragments.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
 </navigation>

@@ -62,6 +62,9 @@ class SplashFragment : Fragment() {
             tryToLogin()
         }
 
+        userViewModel.currentUser.observe(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_splashFragment_to_listFragment)
+        }
     }
 
 
@@ -75,7 +78,9 @@ class SplashFragment : Fragment() {
     private fun tryToLogin() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
         if(sharedPref.contains("username") && sharedPref.contains("email") && sharedPref.contains("password")) {
-            findNavController().navigate(R.id.action_splashFragment_to_listFragment)
+            val username = sharedPref.getString("username", "")
+            val email = sharedPref.getString("email", "")
+            userViewModel.loadCurrentUser(username!!, email!!)
         } else {
             findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         }

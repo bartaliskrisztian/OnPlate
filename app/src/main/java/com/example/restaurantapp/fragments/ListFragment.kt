@@ -9,20 +9,26 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.adapters.RestaurantListAdapter
 import com.example.restaurantapp.databinding.FragmentListBinding
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentListBinding
-    private lateinit var restaurantViewModel: RestaurantViewModel
+    private val restaurantViewModel: RestaurantViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +36,7 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
-        binding.progressCircular.visibility = View.VISIBLE
-        binding.restaurantList.visibility = View.INVISIBLE
+        //loading(true)
 
         recyclerView = binding.restaurantList
         recyclerView.setHasFixedSize(true)
@@ -39,41 +44,108 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         val adapter = RestaurantListAdapter(listOf(), this, binding.root.context)
         recyclerView.adapter = adapter
 
-        restaurantViewModel = activity?.run {
-           ViewModelProvider(this).get(RestaurantViewModel::class.java)
-        }!!
-
+        // when countries are loaded from the API, spinner with countries is set up
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
-            setupSpinner(it)
-        }   
+            setupCountrySpinner(it)
+            setupPriceSpinner()
+        }
 
+        // when restaurants are loaded from the database, we set the country filter
         restaurantViewModel.restaurants.observe(viewLifecycleOwner, {
             restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(0)
         })
 
+        // when the country filter is set, we load
         restaurantViewModel.currentCountry.observe(viewLifecycleOwner) {
-            restaurantViewModel.loadRestaurantsByState()
+            restaurantViewModel.loadRestaurantsFromCountry()
+            Log.d("aaaaa", "currentCountry")
+            Log.d("aaaaa", "$it")
         }
 
         restaurantViewModel.restaurantsFromCountry.observe(viewLifecycleOwner) {
+            restaurantViewModel.loadCurrentCities()
+            Log.d("aaaaa", "restaurantsFromCountry")
+            Log.d("aaaaa", "$it")
+        }
+
+        restaurantViewModel.currentCities.observe(viewLifecycleOwner) {
+            setupCitySpinner(it)
+            if(restaurantViewModel.currentCities.value.isNullOrEmpty()) {
+                restaurantViewModel.currentCity.value = "-"
+            }
+            else {
+                restaurantViewModel.currentCity.value = restaurantViewModel.currentCities.value?.get(0)
+            }
+            Log.d("aaaaa", "currentCities")
+            Log.d("aaaaa", "$it")
+            //restaurantViewModel.currentCity.value = binding.citySpinner.selectedItem.toString()
+        }
+
+        restaurantViewModel.currentCity.observe(viewLifecycleOwner) {
+            loading(true)
+            restaurantViewModel.applyFilters()
+        }
+
+        restaurantViewModel.currentPrice.observe(viewLifecycleOwner) {
+            loading(true)
+            restaurantViewModel.applyFilters()
+        }
+
+        restaurantViewModel.filteredRestaurants.observe(viewLifecycleOwner) {
             adapter.setData(it)
-            binding.progressCircular.visibility = View.GONE
-            binding.restaurantList.visibility = View.VISIBLE
+            loading(false)
         }
 
         return binding.root
     }
 
-    private fun setupSpinner(it: List<String>?) {
-        val spinner = binding.countrySpinner
-        spinner.prompt = "Country"
+    private fun loading(b: Boolean) {
+        if(b){
+            binding.progressCircular.visibility = View.VISIBLE
+            binding.restaurantList.visibility = View.INVISIBLE
+        }
+        else{
+            binding.progressCircular.visibility = View.GONE
+            binding.restaurantList.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupPriceSpinner() {
+        val prices = arrayListOf("1", "2", "3", "4", "5")
+        val spinner = binding.priceSpinner
+        val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, prices)
+        spinner.adapter = arrayAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                restaurantViewModel.currentPrice.value = prices[position].toInt()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun setupCitySpinner(it: List<String>?) {
+        val spinner = binding.citySpinner
         val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, it!!)
         spinner.adapter = arrayAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                binding.progressCircular.visibility = View.VISIBLE
-                binding.restaurantList.visibility = View.INVISIBLE
+                restaurantViewModel.currentCity.value = restaurantViewModel.currentCities.value?.get(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun setupCountrySpinner(it: List<String>?) {
+        val spinner = binding.countrySpinner
+        val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, it!!)
+        spinner.adapter = arrayAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(position)
             }
 

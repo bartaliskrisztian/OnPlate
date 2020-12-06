@@ -15,5 +15,6 @@ class RestaurantRepository(private val restaurantDao: RestaurantDao) {
     fun getRestaurantCount(): Int = restaurantDao.getRestaurantCount()
 
     suspend fun getRestaurants(): List<Restaurant> = restaurantDao.getRestaurants()
-    suspend fun getRestaurantsByCountry(country: String) = restaurantDao.getRestaurantsByCountry(country)
+    suspend fun getCitiesFromCountry(country: String) = restaurantDao.getCitiesFromCountry(country)
+    suspend fun getAllCities() = restaurantDao.getAllCities()
 }

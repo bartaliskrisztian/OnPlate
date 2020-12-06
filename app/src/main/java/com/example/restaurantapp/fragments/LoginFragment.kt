@@ -72,6 +72,7 @@ class LoginFragment : Fragment() {
             }
             else{
                 Log.d("-----", "$user")
+                userViewModel.currentUser.value = user
                 Toast.makeText(context, "Successful login", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_loginFragment_to_listFragment)
             }})

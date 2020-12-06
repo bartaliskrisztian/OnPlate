@@ -9,5 +9,8 @@ data class User(
     @PrimaryKey(autoGenerate = true) var uid: Int,
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "email") val email: String,
-    @ColumnInfo(name = "password") val password: String
+    @ColumnInfo(name = "password") val password: String,
+    @ColumnInfo(name= "address") val address: String,
+    @ColumnInfo(name = "phone_number") val phone_number: String,
+    @ColumnInfo(name= "picture", typeAffinity = ColumnInfo.BLOB) val picture: ByteArray
 )
