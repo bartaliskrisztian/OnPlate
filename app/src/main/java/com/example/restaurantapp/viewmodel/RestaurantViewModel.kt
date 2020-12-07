@@ -100,7 +100,6 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
 
      // downloads all restaurants from BE
      fun loadRestaurantsFromApi() {
-         val result = MutableLiveData<Boolean>()
 
          viewModelScope.launch(Dispatchers.IO) {
              countries.value!!.forEach { country ->
@@ -142,9 +141,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                      while (page != _page + 1) {}
                  }
              }
-             result.postValue(true)
+             dataLoadedFromApi.postValue(true)
          }
-         dataLoadedFromApi = result
     }
 
     fun loadRestaurantsFromDatabase() {

@@ -53,7 +53,7 @@
                     android:tint="#000000"
                     app:layout_constraintStart_toEndOf="@+id/registerUserPicture"
                     app:layout_constraintTop_toTopOf="@+id/registerTitle"
-                    app:srcCompat="@android:drawable/ic_menu_add" />
+                    app:srcCompat="@drawable/ic_camera" />
 
                 <EditText
                     android:id="@+id/registerUsernameText"

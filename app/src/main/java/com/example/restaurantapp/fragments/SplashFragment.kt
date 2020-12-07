@@ -58,12 +58,14 @@ class SplashFragment : Fragment() {
             view.findViewById<TextView>(R.id.loadingState).text = "...loading restaurants from state: $it"
         }
 
-        restaurantViewModel.restaurants.observe(viewLifecycleOwner) {
+        restaurantViewModel.restaurantsLoaded.observe(viewLifecycleOwner) {
             tryToLogin()
         }
 
         userViewModel.currentUser.observe(viewLifecycleOwner) {
-            findNavController().navigate(R.id.action_splashFragment_to_listFragment)
+            if(it != null) {
+                findNavController().navigate(R.id.action_splashFragment_to_listFragment)
+            }
         }
     }
 

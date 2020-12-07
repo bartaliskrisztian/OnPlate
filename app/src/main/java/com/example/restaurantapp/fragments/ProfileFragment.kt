@@ -1,5 +1,6 @@
 package com.example.restaurantapp.fragments
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.restaurantapp.R
 import com.example.restaurantapp.databinding.FragmentProfileBinding
 import com.example.restaurantapp.model.User
@@ -31,9 +32,18 @@ class ProfileFragment : Fragment() {
         userViewModel = activity?.run {
             ViewModelProvider(this).get(UserViewModel::class.java)
         }!!
-        user = userViewModel.currentUser.value!!
-        if(user != null) {
+
+        if(userViewModel.currentUser.value != null) {
+            user = userViewModel.currentUser.value!!
             setupUI()
+        }
+
+        binding.logoutButton.setOnClickListener {
+            val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            val sharedPrefEdit = sharedPref.edit()
+            sharedPrefEdit.clear()
+            sharedPrefEdit.apply()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
 
         return binding.root

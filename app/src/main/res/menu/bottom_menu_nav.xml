@@ -8,6 +8,11 @@
         android:title="@string/restaurantMenuText"
         app:showAsAction="always" />
     <item
+        android:id="@+id/favoriteFragment"
+        android:icon="@drawable/ic_heart"
+        android:title="@string/favoritesText"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_user"
         android:title="@string/profileMenuText"

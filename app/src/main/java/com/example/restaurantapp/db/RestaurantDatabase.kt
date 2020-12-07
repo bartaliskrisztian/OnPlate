@@ -4,16 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.restaurantapp.model.FavoriteRestaurants
-import com.example.restaurantapp.model.Restaurant
-import com.example.restaurantapp.model.RestaurantImages
-import com.example.restaurantapp.model.User
+import com.example.restaurantapp.model.*
 
-@Database(entities = [Restaurant::class, User::class, FavoriteRestaurants::class, RestaurantImages::class], version = 3, exportSchema = false)
+@Database(entities = [Restaurant::class, User::class, FavoriteRestaurants::class, RestaurantImages::class, Countries::class], version = 4, exportSchema = false)
 abstract class RestaurantDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun restaurantDao(): RestaurantDao
+    abstract fun favoritesDao(): FavoritesDao
 
     companion object {
         @Volatile
