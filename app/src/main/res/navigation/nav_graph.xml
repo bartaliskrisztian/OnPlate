@@ -45,7 +45,11 @@
         android:id="@+id/listFragment"
         android:name="com.example.restaurantapp.fragments.ListFragment"
         android:label="ListFragment"
-        tools:layout="@layout/fragment_list"/>
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.restaurantapp.fragments.ProfileFragment"
@@ -59,5 +63,14 @@
         android:id="@+id/favoriteFragment"
         android:name="com.example.restaurantapp.fragments.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.restaurantapp.fragments.DetailFragment"
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_detail"/>
 </navigation>

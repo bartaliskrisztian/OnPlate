@@ -114,9 +114,10 @@
                     android:hint="Phone number"
                     android:inputType="phone"
                     android:textCursorDrawable="@color/itemColor"
-                    app:layout_constraintEnd_toEndOf="@+id/registerPasswordText"
-                    app:layout_constraintStart_toStartOf="@+id/registerPasswordText"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordText" />
+                    app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/registerEmailText"
+                    app:layout_constraintTop_toBottomOf="@+id/registerEmailText" />
 
                 <EditText
                     android:id="@+id/registerPasswordText"
@@ -128,9 +129,10 @@
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:textCursorDrawable="@color/itemColor"
-                    app:layout_constraintEnd_toEndOf="@+id/registerEmailText"
-                    app:layout_constraintStart_toStartOf="@+id/registerEmailText"
-                    app:layout_constraintTop_toBottomOf="@+id/registerEmailText" />
+                    app:layout_constraintEnd_toEndOf="@+id/registerUserAddressText"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/registerUserAddressText"
+                    app:layout_constraintTop_toBottomOf="@+id/registerUserAddressText" />
 
                 <EditText
                     android:id="@+id/registerPasswordAgain"
@@ -142,22 +144,22 @@
                     android:hint="Password again"
                     android:inputType="textPassword"
                     android:textCursorDrawable="@color/itemColor"
-                    app:layout_constraintEnd_toEndOf="@+id/registerUserAddressText"
+                    app:layout_constraintEnd_toEndOf="@+id/registerPasswordText"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/registerUserAddressText"
-                    app:layout_constraintTop_toBottomOf="@+id/registerUserAddressText" />
+                    app:layout_constraintStart_toStartOf="@+id/registerPasswordText"
+                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordText" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/registerButton"
                     android:layout_width="149dp"
-                    android:layout_height="32dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="35dp"
                     android:background="@drawable/button_layout"
                     android:fontFamily="serif"
                     android:text="REGISTER"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="@+id/registerPasswordAgain"
-                    app:layout_constraintHorizontal_bias="0.509"
+                    app:layout_constraintHorizontal_bias="0.573"
                     app:layout_constraintStart_toStartOf="@+id/registerPasswordAgain"
                     app:layout_constraintTop_toBottomOf="@+id/registerPasswordAgain" />
 
@@ -176,8 +178,8 @@
                     android:id="@+id/progress_circular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="21dp"
-                    android:layout_marginTop="26dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
                     android:indeterminate="true"
                     android:indeterminateTint="@color/itemColor"
                     app:layout_constraintStart_toEndOf="@+id/registerButton"

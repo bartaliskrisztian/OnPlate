@@ -10,12 +10,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.adapters.RestaurantListAdapter
 import com.example.restaurantapp.databinding.FragmentListBinding
+import com.example.restaurantapp.viewmodel.FavoritesViewModel
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
+import com.example.restaurantapp.viewmodel.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -23,6 +26,8 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentListBinding
     private val restaurantViewModel: RestaurantViewModel by activityViewModels()
+    private val favoritesViewModel: FavoritesViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +46,7 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         recyclerView = binding.restaurantList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = RestaurantListAdapter(listOf(), this, binding.root.context)
+        val adapter = RestaurantListAdapter(listOf(), this, binding.root.context, favoritesViewModel, userViewModel)
         recyclerView.adapter = adapter
 
         // when countries are loaded from the API, spinner with countries is set up
@@ -154,6 +159,6 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-        TODO("Not yet implemented")
+        findNavController().navigate(R.id.action_listFragment_to_detailFragment)
     }
 }

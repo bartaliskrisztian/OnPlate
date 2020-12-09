@@ -15,15 +15,16 @@ import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.viewmodel.FavoritesViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
 
-class RestaurantListAdapter(
+class FavoritesListAdapter(
         private var restaurants: List<Restaurant>,
         private val listener: OnItemClickListener,
         private val context: Context,
         private val favoritesViewModel: FavoritesViewModel,
         private val userViewModel: UserViewModel):
-    RecyclerView.Adapter<RestaurantListAdapter.RestaurantListHolder>() {
+RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
 
     inner class RestaurantListHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
         init {
             itemView.setOnClickListener(this)
         }
@@ -36,24 +37,21 @@ class RestaurantListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantListHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesListAdapter.RestaurantListHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.restaurant_item_layout, parent, false)
         return RestaurantListHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: RestaurantListHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoritesListAdapter.RestaurantListHolder, position: Int) {
         val currentItem = restaurants[position]
+        holder.itemView.findViewById<ImageButton>(R.id.favoriteButton).visibility = View.GONE
         val restaurantImage = holder.itemView.findViewById<ImageView>(R.id.restaurantImage)
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
         Glide.with(context).load(currentItem.image_url).into(restaurantImage)
 
-        holder.itemView.findViewById<ImageButton>(R.id.favoriteButton).setOnClickListener{
-            val userId = userViewModel.currentUser.value!!.uid
-            val newFavorite = FavoriteRestaurants(0, userId, currentItem)
-            favoritesViewModel.addFavorite(newFavorite)
-        }
+
     }
 
     override fun getItemCount(): Int = restaurants.size

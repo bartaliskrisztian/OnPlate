@@ -1,5 +1,6 @@
 package com.example.restaurantapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -72,6 +73,15 @@ class LoginFragment : Fragment() {
             }
             else{
                 Log.d("-----", "$user")
+                val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return@observe
+                if(!sharedPref.contains("username") || !sharedPref.contains("email") || !sharedPref.contains("password")) {
+                    val sharedPrefEdit = sharedPref.edit()
+                    sharedPrefEdit.clear()
+                    sharedPrefEdit.putString("username", user.username)
+                    sharedPrefEdit.putString("email", user.email)
+                    sharedPrefEdit.putString("password", user.password)
+                    sharedPrefEdit.apply()
+                }
                 userViewModel.currentUser.value = user
                 Toast.makeText(context, "Successful login", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_loginFragment_to_listFragment)

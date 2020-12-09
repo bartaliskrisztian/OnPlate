@@ -41,6 +41,7 @@ class SplashFragment : Fragment() {
 
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
             restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
+                Log.d("aaaaa", "$it")
                 if(it == 0) {
                     loadRestaurantsFromApi()
                 }
