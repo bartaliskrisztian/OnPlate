@@ -48,11 +48,22 @@ class RestaurantListAdapter(
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
         Glide.with(context).load(currentItem.image_url).into(restaurantImage)
+        val favoriteButton = holder.itemView.findViewById<ImageButton>(R.id.favoriteButton)
+        val isFavorite = restaurantIsFavorite(currentItem.id)
 
-        holder.itemView.findViewById<ImageButton>(R.id.favoriteButton).setOnClickListener{
+        if(isFavorite) {
+            favoriteButton.background = context.getDrawable(R.color.appBackgroundColor)
+        }
+
+        favoriteButton.setOnClickListener{
             val userId = userViewModel.currentUser.value!!.uid
-            val newFavorite = FavoriteRestaurants(0, userId, currentItem)
-            favoritesViewModel.addFavorite(newFavorite)
+            if(isFavorite) {
+                favoritesViewModel.removeFavorite(userId, currentItem.id)
+            }
+            else {
+                val newFavorite = FavoriteRestaurants(0, userId, currentItem.id, currentItem)
+                favoritesViewModel.addFavorite(newFavorite)
+            }
         }
     }
 
@@ -65,5 +76,14 @@ class RestaurantListAdapter(
     fun setData(pRestaurants: List<Restaurant>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
+    }
+
+    fun restaurantIsFavorite(restaurantId: Int): Boolean {
+        favoritesViewModel.favorites.value?.forEach {
+            if(it.id == restaurantId) {
+                return true
+            }
+        }
+        return false
     }
 }

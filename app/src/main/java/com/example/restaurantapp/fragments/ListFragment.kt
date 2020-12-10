@@ -57,7 +57,12 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
         // when restaurants are loaded from the database, we set the country filter
         restaurantViewModel.restaurants.observe(viewLifecycleOwner, {
-            restaurantViewModel.currentCountry.value = restaurantViewModel.countries.value?.get(0)
+            val countries = restaurantViewModel.countries.value
+            if (countries != null) {
+                if(countries.isNotEmpty()) {
+                    restaurantViewModel.currentCountry.value = countries[0]
+                }
+            }
         })
 
         // when the country filter is set, we load
@@ -97,7 +102,13 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         }
 
         restaurantViewModel.filteredRestaurants.observe(viewLifecycleOwner) {
-            adapter.setData(it)
+            if(it != null) {
+                binding.noResult.visibility = View.GONE
+                adapter.setData(it)
+            }
+            else {
+                binding.noResult.visibility = View.VISIBLE
+            }
             loading(false)
         }
 
@@ -159,6 +170,8 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
+        val restaurant = restaurantViewModel.filteredRestaurants.value?.get(position)
+        restaurantViewModel.currentRestaurant.value = restaurant
         findNavController().navigate(R.id.action_listFragment_to_detailFragment)
     }
 }

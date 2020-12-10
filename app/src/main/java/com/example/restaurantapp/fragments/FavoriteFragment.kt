@@ -24,13 +24,8 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
     private val favoritesViewModel: FavoritesViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        favoritesViewModel.loadFavorites(userViewModel.currentUser.value!!.uid)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false)
 
@@ -42,7 +37,13 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         recyclerView.adapter = adapter
 
         favoritesViewModel.favorites.observe(viewLifecycleOwner) {
-            adapter.setData(it)
+            if(it.isEmpty()) {
+                binding.noResult.visibility = View.VISIBLE
+            }
+            else {
+                binding.noResult.visibility = View.GONE
+                adapter.setData(it)
+            }
         }
 
         return binding.root

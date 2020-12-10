@@ -8,4 +8,5 @@ class FavoritesRepository(private val favoritesDao: FavoritesDao) {
 
     suspend fun addFavorite(favoriteRestaurants: FavoriteRestaurants) = favoritesDao.addFavorite(favoriteRestaurants)
     suspend fun getFavoritesFromUser(userId: Int): List<Restaurant> = favoritesDao.getFavoritesFromUser(userId)
+    suspend fun removeFavorite(userId: Int, restaurantId: Int) = favoritesDao.removeFavorite(userId, restaurantId)
 }

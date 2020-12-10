@@ -23,6 +23,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var filteredRestaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
+    var currentRestaurant: MutableLiveData<Restaurant> = MutableLiveData()
 
     // lists for spinner items
     var countries: MutableLiveData<List<String>> = MutableLiveData()
@@ -84,10 +85,17 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
             BEApi.retrofitService.getCountries().enqueue(
                     object: Callback<ApiCountryResponse> {
                         override fun onResponse(call: Call<ApiCountryResponse>, response: Response<ApiCountryResponse>) {
-                            val res: ApiCountryResponse? = response.body()
-                            if(res != null) {
-                                countries.value = res.countries
+                            Log.d("aaaaa", "${response.isSuccessful}")
+                            if(response.isSuccessful) {
+                                val res: ApiCountryResponse? = response.body()
+                                if(res != null) {
+                                    countries.value = res.countries
+                                }
                             }
+                            else {
+                                countries.value = listOf()
+                            }
+
                         }
 
                         override fun onFailure(call: Call<ApiCountryResponse>, t: Throwable) {
@@ -116,21 +124,20 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                      BEApi.retrofitService.getRestaurants(params).enqueue(
                              object : Callback<ApiRestaurantResponse> {
                                  override fun onResponse(call: Call<ApiRestaurantResponse>, response: Response<ApiRestaurantResponse>) {
-                                     val res: ApiRestaurantResponse? = response.body()
-                                     if (res != null) {
-                                         if (res.restaurants.isEmpty()) {
-                                             ok = false
-                                         } else {
-                                             addMultipleRestaurants(res.restaurants)
+                                     if(response.isSuccessful) {
+                                         val res: ApiRestaurantResponse? = response.body()
+                                         if (res != null) {
+                                             if (res.restaurants.isEmpty()) {
+                                                 ok = false
+                                             } else {
+                                                 addMultipleRestaurants(res.restaurants)
+                                             }
                                          }
-                                         /*
-                                    Log.d("aaaaa", "${res.restaurants}")
-                                    Log.d("aaaaa", "${res.restaurants.size}")
-                                    Log.d("aaaaa", "${response}")
-                                    Log.d("aaaaa", "----------------------")
-                                     */
-                                         ++page
                                      }
+                                     else {
+                                         ok = false
+                                     }
+                                     ++page
                                  }
 
                                  override fun onFailure(call: Call<ApiRestaurantResponse>, t: Throwable) {

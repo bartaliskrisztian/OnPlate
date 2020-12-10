@@ -1,11 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.DetailFragment">
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:scrollbars="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/restaurant_image_item">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageButton
+        android:id="@+id/addImageToRestaurant"
+        android:layout_width="72dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:srcCompat="@drawable/ic_camera" />
+
+    <TextView
+        android:id="@+id/restaurantTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@drawable/ic_name"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Name"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <TextView
+        android:id="@+id/restaurantAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_address"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Address"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantTitle"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantTitle" />
+
+    <TextView
+        android:id="@+id/restaurantCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_country"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Country"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantAddress"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantAddress" />
+
+    <TextView
+        android:id="@+id/restaurantPostalCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_mailbox"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Postal code"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantCountry"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantCountry" />
+
+    <TextView
+        android:id="@+id/restaurantPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_price_tag"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Price"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantPostalCode"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantPostalCode" />
+
+    <TextView
+        android:id="@+id/restaurantPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Phone"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantPrice"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantPrice" />
+
+    <TextView
+        android:id="@+id/restaurantReserve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_booking"
+        android:drawablePadding="10dp"
+        android:fontFamily="serif"
+        android:text="Reserve here"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/restaurantPhone"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantPhone" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

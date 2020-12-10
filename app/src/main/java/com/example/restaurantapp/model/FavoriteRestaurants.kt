@@ -9,5 +9,6 @@ import com.google.gson.annotations.SerializedName
 data class FavoriteRestaurants (
         @PrimaryKey(autoGenerate = true) var uid: Int,
         @ColumnInfo(name = "userId") val userId: Int,
+        @ColumnInfo(name = "restaurantId") val restaurantId: Int,
         @ColumnInfo(name = "restaurant") val restaurant: Restaurant
 )

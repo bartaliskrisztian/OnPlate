@@ -32,4 +32,11 @@ class FavoritesViewModel(application: Application): AndroidViewModel(application
             repository.addFavorite(favoriteRestaurants)
         }
     }
+
+    fun removeFavorite(userId: Int, restaurantId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.removeFavorite(userId, restaurantId)
+        }
+    }
+
 }

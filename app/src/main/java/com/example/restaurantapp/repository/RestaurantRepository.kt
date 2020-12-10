@@ -6,6 +6,8 @@ import com.example.restaurantapp.model.Restaurant
 
 class RestaurantRepository(private val restaurantDao: RestaurantDao) {
 
+
+
     suspend fun addMultipleRestaurants(restaurants: List<Restaurant>) {
         restaurants.forEach{
             restaurantDao.addRestaurant(it)
