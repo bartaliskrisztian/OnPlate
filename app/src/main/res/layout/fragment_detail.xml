@@ -12,7 +12,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/restaurantImages"
         android:layout_width="match_parent"
         android:layout_height="216dp"
         android:scrollbars="horizontal"
@@ -30,7 +30,7 @@
         android:layout_marginTop="4dp"
         android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantImages"
         app:srcCompat="@drawable/ic_camera" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:text="Name"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurantImages" />
 
     <TextView
         android:id="@+id/restaurantAddress"
@@ -123,7 +123,9 @@
         android:text="Reserve here"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/restaurantPhone"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurantPhone"
+        android:autoLink="web"
+        android:textColorLink="@color/itemColor"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

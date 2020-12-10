@@ -10,10 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.restaurantapp.db.RestaurantDatabase
 import com.example.restaurantapp.model.Countries
 import com.example.restaurantapp.model.Restaurant
+import com.example.restaurantapp.model.RestaurantImages
 import com.example.restaurantapp.network.ApiCountryResponse
 import com.example.restaurantapp.network.ApiRestaurantResponse
 import com.example.restaurantapp.network.BEApi
 import com.example.restaurantapp.repository.CountryRepository
+import com.example.restaurantapp.repository.ImageRepository
 import com.example.restaurantapp.repository.RestaurantRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +28,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var filteredRestaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
     var currentRestaurant: MutableLiveData<Restaurant> = MutableLiveData()
+
+    lateinit var restaurantImages: LiveData<List<RestaurantImages>>
 
     // lists for spinner items
     var countries: MutableLiveData<List<String>> = MutableLiveData()
@@ -46,13 +50,26 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
 
     private val repository: RestaurantRepository
     private val countryRepository: CountryRepository
+    private val imageRepository: ImageRepository
 
     init {
         val db = RestaurantDatabase.getDatabase(application)
+
         val restaurantDao = db.restaurantDao()
         val countryDao = db.countryDao()
+        val imagesDao = db.imageDao()
+
         repository = RestaurantRepository(restaurantDao)
         countryRepository = CountryRepository(countryDao)
+        imageRepository = ImageRepository(imagesDao)
+
+        loadRestaurantImages()
+    }
+
+    private fun loadRestaurantImages() {
+        viewModelScope.launch(Dispatchers.IO) {
+            restaurantImages = imageRepository.getAllImages()
+        }
     }
 
     fun applyFilters() {
@@ -64,11 +81,11 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         }
 
         // filter by price level
-        /*
+
         result.value = result.value?.filter {
             it.price == currentPrice.value
         }
-         */
+
         filteredRestaurants.value = result.value
     }
 

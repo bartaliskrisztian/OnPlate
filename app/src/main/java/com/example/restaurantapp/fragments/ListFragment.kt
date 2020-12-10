@@ -68,14 +68,10 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         // when the country filter is set, we load
         restaurantViewModel.currentCountry.observe(viewLifecycleOwner) {
             restaurantViewModel.loadRestaurantsFromCountry()
-            Log.d("aaaaa", "currentCountry")
-            Log.d("aaaaa", "$it")
         }
 
         restaurantViewModel.restaurantsFromCountry.observe(viewLifecycleOwner) {
             restaurantViewModel.loadCurrentCities()
-            Log.d("aaaaa", "restaurantsFromCountry")
-            Log.d("aaaaa", "$it")
         }
 
         restaurantViewModel.currentCities.observe(viewLifecycleOwner) {
@@ -86,8 +82,6 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
             else {
                 restaurantViewModel.currentCity.value = restaurantViewModel.currentCities.value?.get(0)
             }
-            Log.d("aaaaa", "currentCities")
-            Log.d("aaaaa", "$it")
             //restaurantViewModel.currentCity.value = binding.citySpinner.selectedItem.toString()
         }
 

@@ -74,7 +74,6 @@ class RegisterFragment : Fragment() {
         phone_number = binding.registerUserPhoneText.text.toString()
 
         if(imageUri != null) {
-            val os = ByteArrayOutputStream()
             val inputStream = activity?.contentResolver?.openInputStream(imageUri)
             imageByteArray = inputStream!!.readBytes()
         }
