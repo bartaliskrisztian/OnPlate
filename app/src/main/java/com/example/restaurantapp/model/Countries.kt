@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "countries")
-class Countries(
+data class Countries(
     @PrimaryKey(autoGenerate = true) var uid: Int,
     @ColumnInfo(name = "name") val name: String
 )

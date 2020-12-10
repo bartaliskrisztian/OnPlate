@@ -69,7 +69,6 @@ class SplashFragment : Fragment() {
 
         userViewModel.currentUser.observe(viewLifecycleOwner) {
             if(it != null) {
-                favoritesViewModel.loadFavorites(userViewModel.currentUser.value!!.uid)
                 findNavController().navigate(R.id.action_splashFragment_to_listFragment)
             }
             else {

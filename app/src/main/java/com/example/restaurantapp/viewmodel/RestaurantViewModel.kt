@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.restaurantapp.db.RestaurantDatabase
+import com.example.restaurantapp.model.Countries
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.network.ApiCountryResponse
 import com.example.restaurantapp.network.ApiRestaurantResponse
 import com.example.restaurantapp.network.BEApi
+import com.example.restaurantapp.repository.CountryRepository
 import com.example.restaurantapp.repository.RestaurantRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,10 +45,14 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     var restaurantsLoaded: MutableLiveData<Boolean> = MutableLiveData() // true if 'restaurants' attribute is initialized from db
 
     private val repository: RestaurantRepository
+    private val countryRepository: CountryRepository
 
     init {
-        val restaurantDao = RestaurantDatabase.getDatabase(application).restaurantDao()
+        val db = RestaurantDatabase.getDatabase(application)
+        val restaurantDao = db.restaurantDao()
+        val countryDao = db.countryDao()
         repository = RestaurantRepository(restaurantDao)
+        countryRepository = CountryRepository(countryDao)
     }
 
     fun applyFilters() {
@@ -81,7 +87,21 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
      }
 
      fun loadCountries() {
-        viewModelScope.launch {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            if(countryRepository.getCountryCount() == 0) {
+                loadCountriesFromApi()
+            }
+            else {
+                countries.postValue(countryRepository.getAllCountries())
+            }
+
+        }
+    }
+
+
+    fun loadCountriesFromApi() {
+        viewModelScope.launch(Dispatchers.IO) {
             BEApi.retrofitService.getCountries().enqueue(
                     object: Callback<ApiCountryResponse> {
                         override fun onResponse(call: Call<ApiCountryResponse>, response: Response<ApiCountryResponse>) {
@@ -90,10 +110,11 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                                 val res: ApiCountryResponse? = response.body()
                                 if(res != null) {
                                     countries.value = res.countries
+                                    addMultipleCountries(res.countries)
                                 }
                             }
                             else {
-                                countries.value = listOf()
+                                countries.value = listOf("AW")
                             }
 
                         }
@@ -105,7 +126,6 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                     })
         }
     }
-
      // downloads all restaurants from BE
      fun loadRestaurantsFromApi() {
 
@@ -118,7 +138,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                  params["per_page"] = "100"
                  var ok = true
                  var page = 1
-                 while (ok && country != "US") {
+                 while (ok ) { //  && country != "US"
                      val _page = page
                      params["page"] = page.toString()
                      BEApi.retrofitService.getRestaurants(params).enqueue(
@@ -148,6 +168,42 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                      while (page != _page + 1) {}
                  }
              }
+             /*
+             val newRestaurant1 = Restaurant(0,
+                     "Pizza 21",
+                     "Street 23.",
+                     "New York",
+                     "AW",
+                     "New York",
+                     "535600",
+                     "AW",
+                     "0695994",
+                     41.935137,
+                     -87.662815,
+                     2,
+                     "http://www.opentable.com/single.aspx?rid=107257",
+                     "http://mobile.opentable.com/opentable/?restId=107257",
+                     "https://www.opentable.com/img/restimages/107257.jpg"
+             )
+             val newRestaurant2 = Restaurant(1,
+                     "Factory",
+                     "Street 98.",
+                     "Las Vegas",
+                     "AW",
+                     "Las Vegas",
+                     "535600",
+                     "AW",
+                     "0695994",
+                     41.933737,
+                     -77.662815,
+                     4,
+                     "http://www.opentable.com/single.aspx?rid=107257",
+                     "http://mobile.opentable.com/opentable/?restId=107257",
+                     "https://www.opentable.com/img/restimages/107257.jpg"
+             )
+             repository.addMultipleRestaurants(listOf(newRestaurant1, newRestaurant2))
+
+              */
              dataLoadedFromApi.postValue(true)
          }
     }
@@ -155,7 +211,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     fun loadRestaurantsFromDatabase() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            restaurants.postValue(repository.getRestaurants())
+            val res = repository.getRestaurants()
+            restaurants.postValue(res)
             restaurantsLoaded.postValue(true)
         }
     }
@@ -164,6 +221,12 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     fun addMultipleRestaurants(restaurants: List<Restaurant>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMultipleRestaurants(restaurants)
+        }
+    }
+
+    fun addMultipleCountries(countries: List<String>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            countryRepository.addCountries(countries)
         }
     }
 

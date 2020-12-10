@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.example.restaurantapp.R
 import com.example.restaurantapp.databinding.FragmentDetailBinding
+import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
 
 class DetailFragment : Fragment() {
@@ -22,12 +23,24 @@ class DetailFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
-        restaurantViewModel.currentRestaurant.observe(viewLifecycleOwner) {
 
+        restaurantViewModel.currentRestaurant.observe(viewLifecycleOwner) {
+            if(it != null) {
+                changeUI(it)
+            }
         }
 
         return binding.root
     }
 
+    private fun changeUI(restaurant: Restaurant) {
+        binding.restaurantTitle.text = restaurant.name
+        binding.restaurantAddress.text = restaurant.address
+        binding.restaurantCountry.text = restaurant.country
+        binding.restaurantPostalCode.text = restaurant.postal_code
+        binding.restaurantPhone.text = restaurant.phone
+        binding.restaurantPrice.text = restaurant.price.toString()
+        binding.restaurantReserve.text = restaurant.reserve_url
+    }
 
 }

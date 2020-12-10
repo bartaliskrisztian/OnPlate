@@ -87,7 +87,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/restaurantAddress"
-            app:srcCompat="@drawable/ic_heart" />
+            app:srcCompat="@drawable/ic_heart"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

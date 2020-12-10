@@ -6,7 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
-private const val BASE_URL = "https://opentable.herokuapp.com/api/"
+//private const val BASE_URL = "https://opentable.herokuapp.com/api/"
+private const val BASE_URL = "https://ratpark-api.imok.space/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
@@ -14,10 +15,10 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface BEApiService {
-    @GET("/api/restaurants")
+    @GET("restaurants")
     fun getRestaurants(@QueryMap params: Map<String, String>): Call<ApiRestaurantResponse>
 
-    @GET("/api/countries")
+    @GET("countries")
     fun getCountries(): Call<ApiCountryResponse>
 
 }

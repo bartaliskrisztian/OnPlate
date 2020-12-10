@@ -13,13 +13,14 @@ import com.example.restaurantapp.R
 import com.example.restaurantapp.model.FavoriteRestaurants
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.viewmodel.FavoritesViewModel
+import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
 
 class FavoritesListAdapter(
-        private var restaurants: List<Restaurant>,
+        private var restaurants: List<FavoriteRestaurants>,
         private val listener: OnItemClickListener,
         private val context: Context,
-        private val favoritesViewModel: FavoritesViewModel,
+        private val restaurantViewModel: RestaurantViewModel,
         private val userViewModel: UserViewModel):
 RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
 
@@ -32,6 +33,7 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
+                restaurantViewModel.currentRestaurant.value = restaurants[position].restaurant
                 listener.onItemClick(position)
             }
         }
@@ -43,7 +45,7 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
     }
 
     override fun onBindViewHolder(holder: FavoritesListAdapter.RestaurantListHolder, position: Int) {
-        val currentItem = restaurants[position]
+        val currentItem = restaurants[position].restaurant
         holder.itemView.findViewById<ImageButton>(R.id.favoriteButton).visibility = View.GONE
         val restaurantImage = holder.itemView.findViewById<ImageView>(R.id.restaurantImage)
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
@@ -60,7 +62,7 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
         fun onItemClick(position: Int)
     }
 
-    fun setData(pRestaurants: List<Restaurant>) {
+    fun setData(pRestaurants: List<FavoriteRestaurants>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
     }

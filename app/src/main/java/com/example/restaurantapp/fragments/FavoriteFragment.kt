@@ -14,6 +14,7 @@ import com.example.restaurantapp.R
 import com.example.restaurantapp.adapters.FavoritesListAdapter
 import com.example.restaurantapp.databinding.FragmentFavoriteBinding
 import com.example.restaurantapp.viewmodel.FavoritesViewModel
+import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
 
 
@@ -22,6 +23,7 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recyclerView: RecyclerView
     private val favoritesViewModel: FavoritesViewModel by activityViewModels()
+    private val restaurantViewModel: RestaurantViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +35,17 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         recyclerView = binding.favoritesList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = FavoritesListAdapter(listOf(), this, binding.root.context, favoritesViewModel, userViewModel)
+        val adapter = FavoritesListAdapter(listOf(), this, binding.root.context, restaurantViewModel, userViewModel)
         recyclerView.adapter = adapter
 
-        favoritesViewModel.favorites.observe(viewLifecycleOwner) {
+        favoritesViewModel.favorites.observe(viewLifecycleOwner) { it ->
             if(it.isEmpty()) {
                 binding.noResult.visibility = View.VISIBLE
             }
             else {
                 binding.noResult.visibility = View.GONE
-                adapter.setData(it)
+                val usersFavorite = it.filter { it.userId == userViewModel.currentUser.value?.uid }
+                adapter.setData(usersFavorite)
             }
         }
 

@@ -1,12 +1,14 @@
 package com.example.restaurantapp.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.restaurantapp.R
@@ -52,15 +54,17 @@ class RestaurantListAdapter(
         val isFavorite = restaurantIsFavorite(currentItem.id)
 
         if(isFavorite) {
-            favoriteButton.background = context.getDrawable(R.color.appBackgroundColor)
+            favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
         }
 
         favoriteButton.setOnClickListener{
             val userId = userViewModel.currentUser.value!!.uid
             if(isFavorite) {
+                favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black))
                 favoritesViewModel.removeFavorite(userId, currentItem.id)
             }
             else {
+                favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
                 val newFavorite = FavoriteRestaurants(0, userId, currentItem.id, currentItem)
                 favoritesViewModel.addFavorite(newFavorite)
             }
@@ -78,9 +82,9 @@ class RestaurantListAdapter(
         notifyDataSetChanged()
     }
 
-    fun restaurantIsFavorite(restaurantId: Int): Boolean {
+    private fun restaurantIsFavorite(restaurantId: Int): Boolean {
         favoritesViewModel.favorites.value?.forEach {
-            if(it.id == restaurantId) {
+            if(it.restaurantId == restaurantId) {
                 return true
             }
         }

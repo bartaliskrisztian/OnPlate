@@ -7,13 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.restaurantapp.model.*
 
-@Database(entities = [Restaurant::class, User::class, FavoriteRestaurants::class, RestaurantImages::class, Countries::class], version = 7, exportSchema = false)
+@Database(entities = [Restaurant::class, User::class, FavoriteRestaurants::class, RestaurantImages::class, Countries::class], version = 8, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RestaurantDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun restaurantDao(): RestaurantDao
     abstract fun favoritesDao(): FavoritesDao
+    abstract fun countryDao(): CountryDao
 
     companion object {
         @Volatile
