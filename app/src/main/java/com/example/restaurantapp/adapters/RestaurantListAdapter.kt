@@ -15,6 +15,7 @@ import com.example.restaurantapp.R
 import com.example.restaurantapp.model.FavoriteRestaurants
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.viewmodel.FavoritesViewModel
+import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
 
 class RestaurantListAdapter(
@@ -22,7 +23,8 @@ class RestaurantListAdapter(
         private val listener: OnItemClickListener,
         private val context: Context,
         private val favoritesViewModel: FavoritesViewModel,
-        private val userViewModel: UserViewModel):
+        private val userViewModel: UserViewModel,
+        private val restaurantViewModel: RestaurantViewModel):
     RecyclerView.Adapter<RestaurantListAdapter.RestaurantListHolder>() {
 
     inner class RestaurantListHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -50,6 +52,7 @@ class RestaurantListAdapter(
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
         Glide.with(context).load(currentItem.image_url).into(restaurantImage)
+
         val favoriteButton = holder.itemView.findViewById<ImageButton>(R.id.favoriteButton)
         val isFavorite = restaurantIsFavorite(currentItem.id)
 
@@ -62,11 +65,13 @@ class RestaurantListAdapter(
             if(isFavorite) {
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black))
                 favoritesViewModel.removeFavorite(userId, currentItem.id)
+                notifyDataSetChanged()
             }
             else {
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
                 val newFavorite = FavoriteRestaurants(0, userId, currentItem.id, currentItem)
                 favoritesViewModel.addFavorite(newFavorite)
+                notifyDataSetChanged()
             }
         }
     }

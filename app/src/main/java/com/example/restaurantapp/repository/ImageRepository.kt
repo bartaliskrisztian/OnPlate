@@ -6,6 +6,8 @@ import com.example.restaurantapp.model.RestaurantImages
 
 class ImageRepository(private val imagesDao: ImagesDao) {
 
+    val images = imagesDao.getAllImages()
+
     suspend fun addImage(restaurantImages: RestaurantImages) = imagesDao.addImage(restaurantImages)
     fun getAllImages(): LiveData<List<RestaurantImages>> = imagesDao.getAllImages()
 }

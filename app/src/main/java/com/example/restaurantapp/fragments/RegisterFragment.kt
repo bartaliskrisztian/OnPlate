@@ -18,20 +18,20 @@ import com.example.restaurantapp.R
 import com.example.restaurantapp.databinding.FragmentRegisterBinding
 import com.example.restaurantapp.model.User
 import com.example.restaurantapp.viewmodel.UserViewModel
-import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 
 
 class RegisterFragment : Fragment() {
 
-    private lateinit var binding: FragmentRegisterBinding
     private val userViewModel: UserViewModel by activityViewModels()
+    private lateinit var binding: FragmentRegisterBinding
+
     private lateinit var username: String
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var passwordAgain: String
     private lateinit var address: String
-    private lateinit var phone_number: String
+    private lateinit var phoneNumber: String
     private lateinit var imageUri: Uri
     private lateinit var imageByteArray: ByteArray
 
@@ -71,7 +71,7 @@ class RegisterFragment : Fragment() {
         password = binding.registerPasswordText.text.toString()
         passwordAgain = binding.registerPasswordAgain.text.toString()
         address = binding.registerUserAddressText.text.toString()
-        phone_number = binding.registerUserPhoneText.text.toString()
+        phoneNumber = binding.registerUserPhoneText.text.toString()
 
         if(imageUri != null) {
             val inputStream = activity?.contentResolver?.openInputStream(imageUri)
@@ -94,7 +94,7 @@ class RegisterFragment : Fragment() {
         userViewModel.usedUser.observe(viewLifecycleOwner, { user ->
             if(user == null) {
                 val passwordHash = sha256(password)
-                val newUser = User(0, username, email, passwordHash, address, phone_number, imageByteArray)
+                val newUser = User(0, username, email, passwordHash, address, phoneNumber, imageByteArray)
                 Log.d("aaaaa", "$newUser")
                 val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
                 val sharedPrefEdit = sharedPref.edit()

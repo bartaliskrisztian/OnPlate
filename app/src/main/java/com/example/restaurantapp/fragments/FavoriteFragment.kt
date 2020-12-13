@@ -35,7 +35,7 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         recyclerView = binding.favoritesList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = FavoritesListAdapter(listOf(), this, binding.root.context, restaurantViewModel, userViewModel)
+        val adapter = FavoritesListAdapter(listOf(), this, binding.root.context, restaurantViewModel, userViewModel, favoritesViewModel)
         recyclerView.adapter = adapter
 
         favoritesViewModel.favorites.observe(viewLifecycleOwner) { it ->
@@ -56,4 +56,10 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         findNavController().navigate(R.id.action_favoriteFragment_to_detailFragment)
     }
 
+    override fun onItemLongClick(position: Int) {
+        val popup = RemoveFavoriteFragment()
+        parentFragmentManager.let {
+            popup.show(it, "")
+        }
+    }
 }

@@ -2,13 +2,11 @@ package com.example.restaurantapp.viewmodel
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.restaurantapp.db.RestaurantDatabase
-import com.example.restaurantapp.model.Countries
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.model.RestaurantImages
 import com.example.restaurantapp.network.ApiCountryResponse
@@ -24,18 +22,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RestaurantViewModel(application: Application): AndroidViewModel(application) {
-    var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
-    var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData()
-    var filteredRestaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
-    var currentRestaurant: MutableLiveData<Restaurant> = MutableLiveData()
+    var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData() // all restaurants loaded from the db
+    var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData() // restaurants filtered by the current state
+    var filteredRestaurants: MutableLiveData<List<Restaurant>> = MutableLiveData() // restaurants filtered by all filters
+    var currentRestaurant: MutableLiveData<Restaurant> = MutableLiveData() // the restaurant the user wants to see
 
-    lateinit var restaurantImages: LiveData<List<RestaurantImages>>
+    var restaurantImages: LiveData<List<RestaurantImages>>  // all restaurant images uploaded by users
 
     // lists for spinner items
     var countries: MutableLiveData<List<String>> = MutableLiveData()
     var currentCities: MutableLiveData<List<String>> = MutableLiveData()
 
-    // filters
+    // current filters, if one of them changes we re-filter the restaurants
     var currentCountry: MutableLiveData<String> = MutableLiveData()
     var currentCity: MutableLiveData<String> = MutableLiveData()
     var currentPrice: MutableLiveData<Int> = MutableLiveData()
@@ -48,7 +46,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     var dataLoadedFromApi: MutableLiveData<Boolean> = MutableLiveData() // true if restaurants are downloaded from BE
     var restaurantsLoaded: MutableLiveData<Boolean> = MutableLiveData() // true if 'restaurants' attribute is initialized from db
 
-    private val repository: RestaurantRepository
+    // repositories used for communicating with the db
+    private val restaurantRepository: RestaurantRepository
     private val countryRepository: CountryRepository
     private val imageRepository: ImageRepository
 
@@ -59,52 +58,74 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         val countryDao = db.countryDao()
         val imagesDao = db.imageDao()
 
-        repository = RestaurantRepository(restaurantDao)
+        restaurantRepository = RestaurantRepository(restaurantDao)
         countryRepository = CountryRepository(countryDao)
         imageRepository = ImageRepository(imagesDao)
 
-        loadRestaurantImages()
+        //loadRestaurantImages()
+        restaurantImages =  imageRepository.images
     }
 
-    private fun loadRestaurantImages() {
+    // uploading an image to a restaurant
+    fun addImageToRestaurant(image: RestaurantImages) {
         viewModelScope.launch(Dispatchers.IO) {
-            restaurantImages = imageRepository.getAllImages()
+            imageRepository.addImage(image)
         }
     }
 
+
+    // loading all images uploaded by users
+    private fun loadRestaurantImages() {
+        viewModelScope.launch(Dispatchers.IO) {
+            restaurantImages = imageRepository.getAllImages()
+            Log.d("aaaaa", "${imageRepository.getAllImages()}")
+        }
+    }
+
+    // when on of the filters changes, we re-filter the restaurants from the current state
     fun applyFilters() {
         val result = MutableLiveData<List<Restaurant>>()
 
         // filter by city
-        result.value = restaurantsFromCountry.value?.filter {
-            it.city == currentCity.value
+        if (currentCity.value != "-") {
+            result.value = restaurantsFromCountry.value?.filter {
+                it.city == currentCity.value
+            }
+        }
+        else {
+            result.value = restaurantsFromCountry.value
         }
 
-        // filter by price level
 
-        result.value = result.value?.filter {
-            it.price == currentPrice.value
+        // filter by price level
+        if(currentPrice.value!! > 0) {
+            result.value = result.value?.filter {
+                it.price == currentPrice.value
+            }
         }
 
         filteredRestaurants.value = result.value
     }
 
+     // getting all cities from current restaurants
      fun loadCurrentCities() {
          viewModelScope.launch(Dispatchers.IO) {
              if (currentCountry.value != null) {
-                 currentCities.postValue(repository.getCitiesFromCountry(currentCountry.value!!))
+                 currentCities.postValue(restaurantRepository.getCitiesFromCountry(currentCountry.value!!))
              }
          }
      }
 
+
+     // filtering restaurants by country
      fun loadRestaurantsFromCountry() {
          restaurantsFromCountry.value = restaurants.value?.filter {
              it.country == currentCountry.value
          }
      }
 
+     // if there is no country stored in db, then we download from BE, otherwise we load from db
      fun loadCountries() {
-
         viewModelScope.launch(Dispatchers.IO) {
             if(countryRepository.getCountryCount() == 0) {
                 loadCountriesFromApi()
@@ -116,8 +137,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-
-    fun loadCountriesFromApi() {
+    // downloads all countries from BE
+    private fun loadCountriesFromApi() {
         viewModelScope.launch(Dispatchers.IO) {
             BEApi.retrofitService.getCountries().enqueue(
                     object: Callback<ApiCountryResponse> {
@@ -143,7 +164,8 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                     })
         }
     }
-     // downloads all restaurants from BE
+
+     // downloads all restaurants from BE, using countries
      fun loadRestaurantsFromApi() {
 
          viewModelScope.launch(Dispatchers.IO) {
@@ -156,7 +178,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                  var ok = true
                  var page = 1
                  while (ok ) { //  && country != "US"
-                     val _page = page
+                     val pageC = page
                      params["page"] = page.toString()
                      BEApi.retrofitService.getRestaurants(params).enqueue(
                              object : Callback<ApiRestaurantResponse> {
@@ -182,7 +204,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                                  }
                              })
                      // wait for answer
-                     while (page != _page + 1) {}
+                     while (page != pageC + 1) {}
                  }
              }
              /*
@@ -225,10 +247,10 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
          }
     }
 
+    // loads all restaurants from db
     fun loadRestaurantsFromDatabase() {
-
         viewModelScope.launch(Dispatchers.IO) {
-            val res = repository.getRestaurants()
+            val res = restaurantRepository.getRestaurants()
             restaurants.postValue(res)
             restaurantsLoaded.postValue(true)
         }
@@ -237,10 +259,11 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     // adds multiple restaurants to the db
     fun addMultipleRestaurants(restaurants: List<Restaurant>) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addMultipleRestaurants(restaurants)
+            restaurantRepository.addMultipleRestaurants(restaurants)
         }
     }
 
+    // adds multiple countries to db
     fun addMultipleCountries(countries: List<String>) {
         viewModelScope.launch(Dispatchers.IO) {
             countryRepository.addCountries(countries)
@@ -252,7 +275,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         val result = MutableLiveData<Int>()
         viewModelScope.launch(Dispatchers.IO)
         {
-            result.postValue(repository.getRestaurantCount())
+            result.postValue(restaurantRepository.getRestaurantCount())
         }
         restaurantCount = result
     }

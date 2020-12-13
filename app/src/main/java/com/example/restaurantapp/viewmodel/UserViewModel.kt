@@ -24,18 +24,22 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         repository = UserRepository(userDao)
     }
 
+    // getting the user by username or email address
     fun loadCurrentUser(username: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             currentUser.postValue(repository.getUserByUsernameOrEmail(username, email))
         }
     }
 
+    // loading all registered users
     fun loadUsers() {
         viewModelScope.launch(Dispatchers.IO) {
             users = repository.users
         }
     }
 
+    // getting all users with specific username or email (should be 1 or 0)
+    // needed for checking if the given username or email is used by another user
     fun getUsersForRegistration(username: String, email: String) {
         val result = MutableLiveData<User>()
         viewModelScope.launch(Dispatchers.IO) {
@@ -45,6 +49,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         usedUser = result
     }
 
+    // getting user by username/email and password, needed for log the user in
     fun getUsersForLogin(username: String, password: String) {
         val result = MutableLiveData<User>()
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,12 +59,14 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         usedUser = result
     }
 
+    // adding one user to db
     fun addUser(user: User) {
         viewModelScope.launch (Dispatchers.IO) {
             repository.addUser(user)
         }
     }
 
+    // removing a user from the db
     fun deleteUser(user: User) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteUserByID(user.uid)

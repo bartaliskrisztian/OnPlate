@@ -21,13 +21,15 @@ class FavoritesListAdapter(
         private val listener: OnItemClickListener,
         private val context: Context,
         private val restaurantViewModel: RestaurantViewModel,
-        private val userViewModel: UserViewModel):
+        private val userViewModel: UserViewModel,
+        private val favoritesViewModel: FavoritesViewModel):
 RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
 
-    inner class RestaurantListHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class RestaurantListHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
 
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -36,6 +38,16 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
                 restaurantViewModel.currentRestaurant.value = restaurants[position].restaurant
                 listener.onItemClick(position)
             }
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            val position: Int = adapterPosition
+            if(position != RecyclerView.NO_POSITION) {
+                favoritesViewModel.currentFavorite.value = restaurants[position]
+                listener.onItemLongClick(position)
+                notifyDataSetChanged()
+            }
+            return true
         }
     }
 
@@ -60,10 +72,12 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+        fun onItemLongClick(position: Int)
     }
 
     fun setData(pRestaurants: List<FavoriteRestaurants>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
     }
+
 }

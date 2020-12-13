@@ -30,6 +30,7 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var recyclerView: RecyclerView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
@@ -46,13 +47,14 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         recyclerView = binding.restaurantList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        val adapter = RestaurantListAdapter(listOf(), this, binding.root.context, favoritesViewModel, userViewModel)
+        val adapter = RestaurantListAdapter(listOf(), this, binding.root.context, favoritesViewModel, userViewModel, restaurantViewModel)
         recyclerView.adapter = adapter
 
         // when countries are loaded from the API, spinner with countries is set up
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
             setupCountrySpinner(it)
             setupPriceSpinner()
+            restaurantViewModel.currentPrice.value = 0
         }
 
         // when restaurants are loaded from the database, we set the country filter
@@ -121,14 +123,19 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
     }
 
     private fun setupPriceSpinner() {
-        val prices = arrayListOf("1", "2", "3", "4", "5")
+        val prices = arrayListOf("-","1", "2", "3", "4", "5")
         val spinner = binding.priceSpinner
         val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, prices)
         spinner.adapter = arrayAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                restaurantViewModel.currentPrice.value = prices[position].toInt()
+                if(position == 0) {
+                    restaurantViewModel.currentPrice.value = 0
+                }
+                else {
+                    restaurantViewModel.currentPrice.value = prices[position].toInt()
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -137,7 +144,11 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
     private fun setupCitySpinner(it: List<String>?) {
         val spinner = binding.citySpinner
-        val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, it!!)
+        val list = arrayListOf("-")
+        if (it != null) {
+            list.addAll(it)
+        }
+        val arrayAdapter = ArrayAdapter(binding.root.context, R.layout.spinner_item_layout, list)
         spinner.adapter = arrayAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

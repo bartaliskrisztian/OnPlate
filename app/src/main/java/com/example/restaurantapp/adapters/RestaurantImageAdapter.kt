@@ -22,14 +22,15 @@ class RestaurantImageAdapter(private var restaurantImages: List<RestaurantImages
     }
 
     override fun onBindViewHolder(holder: RestaurantImageHolder, position: Int) {
-        val imageUri = restaurantImages[position].imageUri
+        val imageByteArray = restaurantImages[position].image
         val image = holder.itemView.findViewById<ImageView>(R.id.itemImage)
-        Glide.with(context).load(imageUri).into(image)
+        Glide.with(context).load(imageByteArray).into(image)
     }
 
     override fun getItemCount(): Int = restaurantImages.size
 
     fun setData(newRestaurantImages: List<RestaurantImages>) {
         restaurantImages = newRestaurantImages
+        notifyDataSetChanged()
     }
 }

@@ -9,6 +9,6 @@ import androidx.room.PrimaryKey
 data class RestaurantImages (
         @PrimaryKey(autoGenerate = true) var uid: Int,
         @ColumnInfo(name = "restaurantId") val restaurantId: Int,
-        //@ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB) val image: ByteArray
-        @ColumnInfo(name = "image") val imageUri: Uri
+        @ColumnInfo(name = "uploaderId") val uploaderId: Int,
+        @ColumnInfo(name= "image", typeAffinity = ColumnInfo.BLOB) val image: ByteArray
 )
