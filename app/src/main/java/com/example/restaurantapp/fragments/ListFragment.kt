@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -93,6 +94,15 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         }
 
         restaurantViewModel.currentPrice.observe(viewLifecycleOwner) {
+            loading(true)
+            restaurantViewModel.applyFilters()
+        }
+
+        binding.searchInput.addTextChangedListener{
+            restaurantViewModel.searchQuery.value = it.toString()
+        }
+
+        restaurantViewModel.searchQuery.observe(viewLifecycleOwner) {
             loading(true)
             restaurantViewModel.applyFilters()
         }

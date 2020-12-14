@@ -42,8 +42,9 @@ class SplashFragment : Fragment() {
         getRestaurantCount()
 
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
+            restaurantViewModel.searchQuery.value = ""
             restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
-                Log.d("aaaaa", "$it")
+                //Log.d("aaaaa", "$it")
                 if(it == 0) {
                     loadRestaurantsFromApi()
                 }
@@ -54,7 +55,7 @@ class SplashFragment : Fragment() {
         }
 
         restaurantViewModel.dataLoadedFromApi.observe(viewLifecycleOwner) {
-            Log.d("aaaaa", "loadedapi")
+            //Log.d("aaaaa", "loadedapi")
             loadRestaurantsFromDatabase()
         }
 
@@ -63,7 +64,7 @@ class SplashFragment : Fragment() {
         }
 
         restaurantViewModel.restaurantsLoaded.observe(viewLifecycleOwner) {
-            Log.d("aaaaa", "loadedrestaurants")
+            //Log.d("aaaaa", "loadedrestaurants")
             tryToLogin()
         }
 
@@ -88,12 +89,12 @@ class SplashFragment : Fragment() {
     private fun tryToLogin() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
         if(sharedPref.contains("username") && sharedPref.contains("email") && sharedPref.contains("password")) {
-            Log.d("aaaaa", "preftrue")
+            //Log.d("aaaaa", "preftrue")
             val username = sharedPref.getString("username", "")
             val email = sharedPref.getString("email", "")
             userViewModel.loadCurrentUser(username!!, email!!)
         } else {
-            Log.d("aaaaa", "preffalse")
+            //Log.d("aaaaa", "preffalse")
             findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         }
     }

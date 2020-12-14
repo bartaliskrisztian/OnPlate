@@ -56,18 +56,19 @@ class RestaurantListAdapter(
         val favoriteButton = holder.itemView.findViewById<ImageButton>(R.id.favoriteButton)
         val isFavorite = restaurantIsFavorite(currentItem.id)
 
+        // if the restaurant is the user's favorite, we change the button's color
         if(isFavorite) {
             favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
         }
 
         favoriteButton.setOnClickListener{
             val userId = userViewModel.currentUser.value!!.uid
-            if(isFavorite) {
+            if(isFavorite) { // if the restaurant is the user's favorite, then we remove it from the favorites
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black))
                 favoritesViewModel.removeFavorite(userId, currentItem.id)
                 notifyDataSetChanged()
             }
-            else {
+            else { // if the restaurant is not the user's favorite yet, then we add it to the favorites
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
                 val newFavorite = FavoriteRestaurants(0, userId, currentItem.id, currentItem)
                 favoritesViewModel.addFavorite(newFavorite)

@@ -11,8 +11,11 @@ import com.example.restaurantapp.model.RestaurantImages
 interface ImagesDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addImage(restaurantImages: RestaurantImages)
+    fun addImage(restaurantImages: RestaurantImages)
 
     @Query("SELECT * FROM restaurant_images")
     fun getAllImages(): LiveData<List<RestaurantImages>>
+
+    @Query("DELETE FROM restaurant_images WHERE uid=:imageId")
+    suspend fun deleteImage(imageId: Int)
 }

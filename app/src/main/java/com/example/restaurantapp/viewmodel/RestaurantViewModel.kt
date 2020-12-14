@@ -38,6 +38,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     var currentCity: MutableLiveData<String> = MutableLiveData()
     var currentPrice: MutableLiveData<Int> = MutableLiveData()
     var showFavorites: MutableLiveData<Boolean> = MutableLiveData()
+    var searchQuery: MutableLiveData<String> = MutableLiveData()
 
 
     val currentLoadingState: MutableLiveData<String> = MutableLiveData() // for splash feedback
@@ -62,7 +63,6 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         countryRepository = CountryRepository(countryDao)
         imageRepository = ImageRepository(imagesDao)
 
-        //loadRestaurantImages()
         restaurantImages =  imageRepository.images
     }
 
@@ -73,12 +73,9 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-
-    // loading all images uploaded by users
-    private fun loadRestaurantImages() {
+    fun removeImageFromRestaurant(imageId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            restaurantImages = imageRepository.getAllImages()
-            Log.d("aaaaa", "${imageRepository.getAllImages()}")
+            imageRepository.deleteImage(imageId)
         }
     }
 
@@ -102,6 +99,11 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
             result.value = result.value?.filter {
                 it.price == currentPrice.value
             }
+        }
+
+        result.value = result.value?.filter {
+            //it.name.contains(searchQuery.value!!)
+            it.name.toLowerCase().matches("^${searchQuery.value!!.toLowerCase()}.*".toRegex())
         }
 
         filteredRestaurants.value = result.value

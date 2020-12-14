@@ -49,14 +49,14 @@ class DetailFragment : Fragment() {
             restaurantImageByteArray = inputStream!!.readBytes()
             val restaurantId = restaurantViewModel.currentRestaurant.value?.id
             val userId = userViewModel.currentUser.value?.uid
-            val newRestaurantImage = RestaurantImages(0, restaurantId!!, userId!!, restaurantImageByteArray)
+            val newRestaurantImage = RestaurantImages(5, restaurantId!!, userId!!, restaurantImageByteArray)
             restaurantViewModel.addImageToRestaurant(newRestaurantImage)
         }
 
         recyclerView = binding.restaurantImages
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = RestaurantImageAdapter(listOf(), binding.root.context)
+        val adapter = RestaurantImageAdapter(listOf(), binding.root.context, userViewModel, restaurantViewModel)
         recyclerView.adapter = adapter
 
         restaurantViewModel.currentRestaurant.observe(viewLifecycleOwner) {
@@ -66,10 +66,17 @@ class DetailFragment : Fragment() {
         }
 
         restaurantViewModel.restaurantImages.observe(viewLifecycleOwner) {
+
             val restaurantImages = it?.filter { res ->
                 res.restaurantId == restaurantViewModel.currentRestaurant.value?.id
             }
-            adapter.setData(restaurantImages!!)
+            if(restaurantImages!!.isEmpty()) {
+                val placeholder = RestaurantImages(-1, -1, -1, byteArrayOf())
+                adapter.setData(listOf(placeholder))
+            }
+            else {
+                adapter.setData(restaurantImages)
+            }
         }
 
         return binding.root
