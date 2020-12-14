@@ -51,7 +51,15 @@ class RestaurantListAdapter(
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
-        Glide.with(context).load(currentItem.image_url).into(restaurantImage)
+
+        val tempByteArray = restaurantImage(currentItem.id)
+        val image = if(tempByteArray.isEmpty()) {
+            currentItem.image_url
+        }
+        else {
+            tempByteArray
+        }
+        Glide.with(context).load(image).into(restaurantImage)
 
         val favoriteButton = holder.itemView.findViewById<ImageButton>(R.id.favoriteButton)
         val isFavorite = restaurantIsFavorite(currentItem.id)
@@ -95,5 +103,14 @@ class RestaurantListAdapter(
             }
         }
         return false
+    }
+
+    private fun restaurantImage(restaurantId: Int): ByteArray {
+        restaurantViewModel.restaurantImages.value?.forEach {
+            if(it.restaurantId == restaurantId) {
+                return it.image
+            }
+        }
+        return byteArrayOf()
     }
 }

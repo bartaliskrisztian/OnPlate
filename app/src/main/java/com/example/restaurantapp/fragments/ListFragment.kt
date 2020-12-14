@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
 import com.example.restaurantapp.adapters.RestaurantListAdapter
 import com.example.restaurantapp.databinding.FragmentListBinding
+import com.example.restaurantapp.model.FavoriteRestaurants
 import com.example.restaurantapp.viewmodel.FavoritesViewModel
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
@@ -90,12 +91,12 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
         restaurantViewModel.currentCity.observe(viewLifecycleOwner) {
             loading(true)
-            restaurantViewModel.applyFilters()
+            restaurantViewModel.applyFilters(listOf())
         }
 
         restaurantViewModel.currentPrice.observe(viewLifecycleOwner) {
             loading(true)
-            restaurantViewModel.applyFilters()
+            restaurantViewModel.applyFilters(listOf())
         }
 
         binding.searchInput.addTextChangedListener{
@@ -104,7 +105,22 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
 
         restaurantViewModel.searchQuery.observe(viewLifecycleOwner) {
             loading(true)
-            restaurantViewModel.applyFilters()
+            restaurantViewModel.applyFilters(listOf())
+        }
+
+        binding.favoriteFilterButton.setOnClickListener {
+            val showFavorites = restaurantViewModel.showFavorites.value
+            restaurantViewModel.showFavorites.value = !showFavorites!!
+        }
+
+        restaurantViewModel.showFavorites.observe(viewLifecycleOwner) {
+            loading(true)
+            val favorites: List<FavoriteRestaurants> = if(favoritesViewModel.favorites.value == null) {
+                listOf()
+            } else {
+                favoritesViewModel.favorites.value!!
+            }
+            restaurantViewModel.applyFilters(favorites)
         }
 
         restaurantViewModel.filteredRestaurants.observe(viewLifecycleOwner) {

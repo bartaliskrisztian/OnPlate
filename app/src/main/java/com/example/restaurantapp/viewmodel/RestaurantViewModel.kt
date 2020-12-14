@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.restaurantapp.db.RestaurantDatabase
+import com.example.restaurantapp.model.FavoriteRestaurants
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.model.RestaurantImages
 import com.example.restaurantapp.network.ApiCountryResponse
@@ -80,7 +81,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     // when on of the filters changes, we re-filter the restaurants from the current state
-    fun applyFilters() {
+    fun applyFilters(favorites: List<FavoriteRestaurants>) {
         val result = MutableLiveData<List<Restaurant>>()
 
         // filter by city
@@ -104,6 +105,16 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         result.value = result.value?.filter {
             //it.name.contains(searchQuery.value!!)
             it.name.toLowerCase().matches("^${searchQuery.value!!.toLowerCase()}.*".toRegex())
+        }
+
+        if(favorites.isNotEmpty() && showFavorites.value!!) {
+            val favoriteIds = mutableListOf<Int>()
+            favorites.forEach {
+                favoriteIds.add(it.restaurantId)
+            }
+            result.value = result.value?.filter {
+                favoriteIds.contains(it.id)
+            }
         }
 
         filteredRestaurants.value = result.value

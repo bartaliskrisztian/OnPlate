@@ -43,6 +43,7 @@ class SplashFragment : Fragment() {
 
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
             restaurantViewModel.searchQuery.value = ""
+            restaurantViewModel.showFavorites.value = false
             restaurantViewModel.restaurantCount.observe(viewLifecycleOwner) {
                 //Log.d("aaaaa", "$it")
                 if(it == 0) {

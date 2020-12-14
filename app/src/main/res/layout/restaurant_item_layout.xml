@@ -26,7 +26,8 @@
                 android:id="@+id/restaurantImage"
                 android:layout_width="140dp"
                 android:layout_height="132dp"
-                app:srcCompat="@drawable/ic_restaurant" />
+                app:srcCompat="@drawable/ic_restaurant"
+                android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
 
         <TextView
