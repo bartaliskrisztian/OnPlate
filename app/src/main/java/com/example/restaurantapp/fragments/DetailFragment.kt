@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -16,12 +17,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantapp.R
+import com.example.restaurantapp.activities.MapsActivity
 import com.example.restaurantapp.adapters.RestaurantImageAdapter
 import com.example.restaurantapp.databinding.FragmentDetailBinding
 import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.model.RestaurantImages
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
+import java.util.jar.Manifest
 
 class DetailFragment : Fragment() {
 
@@ -77,6 +80,24 @@ class DetailFragment : Fragment() {
             else {
                 adapter.setData(restaurantImages)
             }
+        }
+
+        binding.mapsButton.setOnClickListener {
+            val currentRestaurant = restaurantViewModel.currentRestaurant.value!!
+            val intent = Intent(context, MapsActivity::class.java).apply {
+                putExtra("lat", currentRestaurant.lat)
+                putExtra("lng", currentRestaurant.lng)
+                putExtra("restaurantName", currentRestaurant.name)
+            }
+            startActivity(intent)
+        }
+
+        binding.callButton.setOnClickListener {
+            val currentRestaurant = restaurantViewModel.currentRestaurant.value!!
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${currentRestaurant.phone}")
+
+            startActivity(intent)
         }
 
         return binding.root

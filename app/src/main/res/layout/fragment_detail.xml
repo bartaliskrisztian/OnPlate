@@ -2,14 +2,20 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".fragments.DetailFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurantImages"
@@ -117,17 +123,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:autoLink="web"
         android:drawableLeft="@drawable/ic_booking"
         android:drawablePadding="10dp"
         android:fontFamily="serif"
         android:text="Reserve here"
+        android:textColorLink="@color/itemColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/restaurantPhone"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantPhone"
-        android:autoLink="web"
-        android:textColorLink="@color/itemColor"/>
+        app:layout_constraintTop_toBottomOf="@+id/restaurantPhone" />
 
+    <ImageButton
+        android:id="@+id/callButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.328"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantReserve"
+        app:srcCompat="@drawable/ic_phone_ringing" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/mapsButton"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="7dp"
+        android:background="@null"
+        app:layout_constraintStart_toEndOf="@+id/callButton"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantReserve"
+        app:srcCompat="@drawable/ic_google_maps" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

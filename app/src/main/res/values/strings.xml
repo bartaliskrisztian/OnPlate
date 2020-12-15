@@ -33,4 +33,6 @@
     <string name="restaurantListText">Restaurants</string>
     <string name="searchBarText">Search</string>
     <string name="favoritesText">Favorites</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyCuTarZtrwM8Bwsx5BjNGssaXKzOobL2U0</string>
 </resources>
