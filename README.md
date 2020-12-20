@@ -7,4 +7,5 @@ The application contains 2 activities and 8 fragments.
 ### MainActivity
 
 Contains a fragment container and a bottom navigation bar.
+
 <img src="/images/Névtelen.png"  alt="MainActivity"/>
