@@ -7,7 +7,7 @@ import com.example.restaurantapp.model.Restaurant
 
 class FavoritesRepository(private val favoritesDao: FavoritesDao) {
 
-
+    val favorites = favoritesDao.getAllFavorites()
 
     suspend fun addFavorite(favoriteRestaurants: FavoriteRestaurants) = favoritesDao.addFavorite(favoriteRestaurants)
     fun getAllFavorites(): LiveData<List<FavoriteRestaurants>> = favoritesDao.getAllFavorites()

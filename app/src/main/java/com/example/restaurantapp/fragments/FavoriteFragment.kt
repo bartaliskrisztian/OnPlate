@@ -49,6 +49,10 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
             }
         }
 
+        restaurantViewModel.restaurantImages.observe(viewLifecycleOwner) {
+            adapter.notifyDataSetChanged()
+        }
+
         return binding.root
     }
 

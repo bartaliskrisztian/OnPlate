@@ -71,6 +71,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
     fun addImageToRestaurant(image: RestaurantImages) {
         viewModelScope.launch(Dispatchers.IO) {
             imageRepository.addImage(image)
+            Log.d("aaaaa", "viewmodel")
         }
     }
 

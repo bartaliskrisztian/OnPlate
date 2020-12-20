@@ -52,7 +52,7 @@ class DetailFragment : Fragment() {
             restaurantImageByteArray = inputStream!!.readBytes()
             val restaurantId = restaurantViewModel.currentRestaurant.value?.id
             val userId = userViewModel.currentUser.value?.uid
-            val newRestaurantImage = RestaurantImages(5, restaurantId!!, userId!!, restaurantImageByteArray)
+            val newRestaurantImage = RestaurantImages(0, restaurantId!!, userId!!, restaurantImageByteArray)
             restaurantViewModel.addImageToRestaurant(newRestaurantImage)
         }
 

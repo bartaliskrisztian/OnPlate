@@ -2,6 +2,7 @@ package com.example.restaurantapp.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,8 @@ class RestaurantListAdapter(
         Glide.with(context).load(image).into(restaurantImage)
 
         val favoriteButton = holder.itemView.findViewById<ImageButton>(R.id.favoriteButton)
-        val isFavorite = restaurantIsFavorite(currentItem.id)
+        val userId = userViewModel.currentUser.value?.uid
+        val isFavorite = restaurantIsFavorite(currentItem.id, userId!!)
 
         // if the restaurant is the user's favorite, we change the button's color
         if(isFavorite) {
@@ -96,9 +98,9 @@ class RestaurantListAdapter(
         notifyDataSetChanged()
     }
 
-    private fun restaurantIsFavorite(restaurantId: Int): Boolean {
+    private fun restaurantIsFavorite(restaurantId: Int, userId: Int): Boolean {
         favoritesViewModel.favorites.value?.forEach {
-            if(it.restaurantId == restaurantId) {
+            if(it.restaurantId == restaurantId && it.userId == userId) {
                 return true
             }
         }

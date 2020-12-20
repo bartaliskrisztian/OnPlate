@@ -1,5 +1,6 @@
 package com.example.restaurantapp.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -51,6 +53,10 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
         val adapter = RestaurantListAdapter(listOf(), this, binding.root.context, favoritesViewModel, userViewModel, restaurantViewModel)
         recyclerView.adapter = adapter
+
+        restaurantViewModel.restaurantImages.observe(viewLifecycleOwner) {
+            adapter.notifyDataSetChanged()
+        }
 
         // when countries are loaded from the API, spinner with countries is set up
         restaurantViewModel.countries.observe(viewLifecycleOwner) {
@@ -132,6 +138,15 @@ class ListFragment : Fragment(), RestaurantListAdapter.OnItemClickListener {
                 binding.noResult.visibility = View.VISIBLE
             }
             loading(false)
+        }
+
+        restaurantViewModel.showFavorites.observe(viewLifecycleOwner) {
+            if(it) {
+                binding.favoriteFilterButton.imageTintList =  ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.appBackgroundColor))
+            }
+            else {
+                binding.favoriteFilterButton.imageTintList =  ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+            }
         }
 
         return binding.root

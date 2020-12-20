@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 class FavoritesViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: FavoritesRepository // repo for communicating with the db
-    lateinit var favorites: LiveData<List<FavoriteRestaurants>> // list for storing all favorites from the users
+    var favorites: LiveData<List<FavoriteRestaurants>> // list for storing all favorites from the users
     var currentFavorite: MutableLiveData<FavoriteRestaurants> = MutableLiveData()
 
     init {
         val favoritesDao = RestaurantDatabase.getDatabase(application).favoritesDao()
         repository = FavoritesRepository(favoritesDao)
-        loadAllFavorites()
+        favorites = repository.favorites
     }
 
     // loading all favorites from all users

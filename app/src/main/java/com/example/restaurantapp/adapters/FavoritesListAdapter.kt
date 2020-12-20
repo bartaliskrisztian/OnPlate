@@ -63,7 +63,16 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
-        Glide.with(context).load(currentItem.image_url).into(restaurantImage)
+
+        val tempByteArray = restaurantImage(currentItem.id)
+        val image = if(tempByteArray.isEmpty()) {
+            currentItem.image_url
+        }
+        else {
+            tempByteArray
+        }
+        Glide.with(context).load(image).into(restaurantImage)
+
 
 
     }
@@ -78,6 +87,15 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
     fun setData(pRestaurants: List<FavoriteRestaurants>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
+    }
+
+    private fun restaurantImage(restaurantId: Int): ByteArray {
+        restaurantViewModel.restaurantImages.value?.forEach {
+            if(it.restaurantId == restaurantId) {
+                return it.image
+            }
+        }
+        return byteArrayOf()
     }
 
 }

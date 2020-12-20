@@ -11,7 +11,7 @@ import com.example.restaurantapp.model.RestaurantImages
 interface ImagesDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addImage(restaurantImages: RestaurantImages)
+    suspend fun addImage(restaurantImages: RestaurantImages)
 
     @Query("SELECT * FROM restaurant_images")
     fun getAllImages(): LiveData<List<RestaurantImages>>

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:padding="20dp"
     tools:context=".fragments.RemoveFavoriteFragment"
-    android:background="@color/appBackgroundColor"
+    android:background="@drawable/cornered_layout"
     >
 
     <TextView
