@@ -13,4 +13,4 @@ Contains a fragment container and a bottom navigation bar.
 ### 2. Maps activity
 
 Displays Google Maps with the current restaurant's location and name.
-<img src="images/maps.jpg" alt="Maps Activity"/>
+<img src="images/maps.jpg" alt="Maps Activity" height="300" width="100"/>
