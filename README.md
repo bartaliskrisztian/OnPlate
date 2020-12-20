@@ -4,8 +4,12 @@ University project: Android application for retrieving and displaying informatio
 
 The application contains 2 activities and 8 fragments.
 
-### MainActivity
+## Activities:
+
+### 1.Main Activity
 
 Contains a fragment container and a bottom navigation bar.
 
-<img src="/images/Névtelen.png"  alt="MainActivity"/>
+### 2.Maps activity
+
+Displays Google Maps with the current restaurant's location and name.
