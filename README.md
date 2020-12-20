@@ -1,4 +1,4 @@
-# Restaurant App
+# OnPlate
 
 University project: Android application for retrieving and displaying informations about restaurants, using a free API.
 
@@ -39,4 +39,20 @@ Price, Favourite icon (with this you can favourite it in/out).
 
 Here we can see the list of favorite restaurants of a user. The items can be removed by long click.
 
+<img src="images/favorites.jpg" alt="Favorites Fragment" height="500" width="270"/>
+
+### 4. Remove favorite fragment
+
+A dialog fragment where the user can confirm the removing of a favorite, or cancel it.
+
 <img src="images/remove-favorite.jpg" alt="Favorites Fragment" height="500" width="270"/>
+
+### 5. Detail fragment
+
+Here you can view all the details of what the API returned and edit it according to
+the possibilities. These possibilities are: Favourites, Add/Delete Images. Other things: open
+Google Maps with the coordinates of the restaurant, call the place.
+Regarding displaying the images (at all the options in the app), if you have added your own
+ones, then they are prioritised and those are displayed instead of the ones from the API. In the
+case when you have not added images by your own, image from the API is displayed or if not exists then a
+placeholder.
