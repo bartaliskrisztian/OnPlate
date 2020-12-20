@@ -24,4 +24,13 @@ Displays Google Maps with the current restaurant's location and name.
 Where data is initialised, based on the profile section and
 when the user gets from here to List Fragment, the data is already loaded.
 
-<img src="images/restaurants.jpg" alt="List Fragment" height="500" width="270"/>
+<img src="images/splash.jpg" alt="Splash Fragment" height="500" width="270"/>
+
+### List fragment
+
+Here we have the main list with the restaurants. You can do text search or
+filtering by Favorited data, Country list, City list, Price options. Each item has: Title, Address, Image (placeholder or image uploaded by user),
+Price, Favourite icon (with this you can favourite it in/out).
+
+<img src="images/restaurants.jpg" alt="List Fragment" height="500" width="270"/>|
+<img src="images/city-filter.jpg" alt="List Fragment" height="500" width="270"/>
