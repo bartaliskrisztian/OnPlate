@@ -22,6 +22,7 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recyclerView: RecyclerView
+
     private val favoritesViewModel: FavoritesViewModel by activityViewModels()
     private val restaurantViewModel: RestaurantViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -31,13 +32,14 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false)
 
-
+        // initialize the recyclerview
         recyclerView = binding.favoritesList
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
         val adapter = FavoritesListAdapter(listOf(), this, binding.root.context, restaurantViewModel, userViewModel, favoritesViewModel)
         recyclerView.adapter = adapter
 
+        // if the user has favorites load them, else show a message
         favoritesViewModel.favorites.observe(viewLifecycleOwner) { it ->
             if(it.isEmpty()) {
                 binding.noResult.visibility = View.VISIBLE
@@ -49,6 +51,7 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
             }
         }
 
+        // needed for loading the restaurant image
         restaurantViewModel.restaurantImages.observe(viewLifecycleOwner) {
             adapter.notifyDataSetChanged()
         }
@@ -60,6 +63,7 @@ class FavoriteFragment : Fragment(), FavoritesListAdapter.OnItemClickListener {
         findNavController().navigate(R.id.action_favoriteFragment_to_detailFragment)
     }
 
+    // showing a dialog fragment for removing a favorite
     override fun onItemLongClick(position: Int) {
         val popup = RemoveFavoriteFragment()
         parentFragmentManager.let {

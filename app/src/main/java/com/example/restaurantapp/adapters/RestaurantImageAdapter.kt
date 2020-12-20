@@ -32,6 +32,7 @@ class RestaurantImageAdapter(private var restaurantImages: List<RestaurantImages
         val currentItem = restaurantImages[position]
         val image = holder.itemView.findViewById<ImageView>(R.id.itemImage)
 
+        // if there are on images, load the placeholder into the image
         if(currentItem.uid == -1) {
             Glide.with(context).load(R.drawable.restaurant_icon).into(image)
             return
@@ -43,6 +44,7 @@ class RestaurantImageAdapter(private var restaurantImages: List<RestaurantImages
         val userId = userViewModel.currentUser.value?.uid
         val removeImageButton = holder.itemView.findViewById<ImageButton>(R.id.removeImageButton)
 
+        // if the image is not uploaded by the current user, hide the delete button
         if (currentItem.uploaderId == userId) {
             removeImageButton.setOnClickListener {
                 restaurantViewModel.removeImageFromRestaurant(currentItem.uid)
@@ -56,6 +58,7 @@ class RestaurantImageAdapter(private var restaurantImages: List<RestaurantImages
 
     override fun getItemCount(): Int = restaurantImages.size
 
+    // on data change we set the new list of restaurants
     fun setData(newRestaurantImages: List<RestaurantImages>) {
         restaurantImages = newRestaurantImages
         notifyDataSetChanged()

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/restaurantImageItem"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/restaurantImageItem"
+    android:layout_margin="10dp"
+
     app:cardCornerRadius="10dp"
-    android:layout_margin="10dp">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,21 +19,30 @@
             android:id="@+id/itemImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:contentDescription="@string/restaurantImageContentDescription"
+
             android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_restaurant"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_restaurant" />
+            />
 
         <ImageButton
             android:id="@+id/removeImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/delete_restaurant_image"
+
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+
             android:background="@null"
+            app:srcCompat="@drawable/ic_bin"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_bin" />
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

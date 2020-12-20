@@ -1,26 +1,81 @@
 <resources>
     <string name="app_name">OnPlate</string>
-    <string name="restaurantMenuText">Restaurants</string>
-    <string name="profileMenuText">Profile</string>
-    <string name="mainScreenTitleText">Restaurants</string>
+
+    <!-- Strings used for fragment/activity titles -->
     <string name="title_activity_restaurant">RestaurantActivity</string>
+    <string name="restaurantMenuText">Restaurants</string>
+    <string name="restaurantListText">Restaurants</string>
+    <string name="mainScreenTitleText">Restaurants</string>
+    <string name="favoritesText">Favorites</string>
+    <string name="profileMenuText">Profile</string>
+    <string name="splashTitleText">Restaurant app</string>
+    <string name="loginText">Sign in</string>
+    <string name="loginTitleText">Login</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="noResultTitleText">No result</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="splashTitleText">Restaurant app</string>
-    <string name="loginText">Sign in</string>
-    <string name="username_or_email">Username or email</string>
-    <string name="password">Password</string>
+    <!-- Strings used for content descriptions -->
+    <string name="addImageContentDescription">button for adding image to restaurant</string>
+    <string name="callButtonContentDescription">button for calling a restaurant</string>
+    <string name="mapsButtonContentDescription">button for opening google maps</string>
+    <string name="designContentDescription">plate logo for design</string>
+    <string name="filterLogoContentDescription">drawable for filtering countries</string>
+    <string name="cityFilterLogoContentDescription">logo for filtering by city</string>
+    <string name="priceFilterLogoFilterDescription">logo for filtering by price</string>
+    <string name="favoritesButtonContentDescription">button for showing only favourites</string>
+    <string name="profileImageContentDescription">user profile image</string>
+    <string name="profile_picture_upload">profile picture upload</string>
+    <string name="button_for_upload_profile_picture">button for upload profile picture</string>
+    <string name="splashLogoContentDescription">splash logo</string>
+    <string name="restaurantImageContentDescription">restaurant image</string>
+    <string name="delete_restaurant_image">delete restaurant image</string>
+    <string name="restaurant_item_image">restaurant item image</string>
+    <string name="favorite_button_content">favorite button</string>
+
+    <!-- Strings used for buttons -->
     <string name="toSignUpText">OR SIGN UP</string>
     <string name="loginButtonText">SIGN IN</string>
     <string name="registertTitle">SIGN UP</string>
+    <string name="logoutText">Logout</string>
+    <string name="registerButtonText">REGISTER</string>
+    <string name="yesText">Yes</string>
+    <string name="noText">No</string>
+
+    <!-- Strings used for TextViews -->
+    <string name="detailNamePlaceholder">Name</string>
+    <string name="detailAddressPlaceholder">Address</string>
+    <string name="detailCountryPlaceholder">Country</string>
+    <string name="detailPostalCodePlaceholder">Postal code</string>
+    <string name="detailPricePlaceholder">Price</string>
+    <string name="detailPhonePlaceholder">Phone</string>
+    <string name="detailReservePlaceholder">Reserve here</string>
+    <string name="noFavoritesTitleText">There are no favorites yet</string>
+    <string name="noAccountText">I don\'t have an account</string>
+    <string name="namePlaceholder">Name</string>
+    <string name="registerText">Register</string>
+    <string name="phone_number">Phone number</string>
+    <string name="i_already_have_an_account">I already have an account</string>
+    <string name="removeFavoritesQuestionText">Do you want to remove it from the favorites?</string>
+
+    <!-- Strings used for hints -->
+    <string name="username_or_email">Username or email</string>
+    <string name="password">Password</string>
     <string name="restaurantUsernameText">Username</string>
     <string name="registerEmailText">Email</string>
     <string name="password_again">Password again</string>
+    <string name="passwordAgainHintText">Password again</string>
+    <string name="loginUsernameText">Username or email</string>
+    <string name="passwordHintText">Password</string>
+    <string name="searchBarText">Search</string>
+    <string name="searchHintText">Search</string>
 
+    <!-- Strings used for spinner for filtering restaurants by price level -->
     <string-array name="priceSpinner">
         <item>1</item>
         <item>2</item>
@@ -28,11 +83,5 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="restaurantListText">Restaurants</string>
-    <string name="searchBarText">Search</string>
-    <string name="favoritesText">Favorites</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="google_maps_key">AIzaSyCuTarZtrwM8Bwsx5BjNGssaXKzOobL2U0</string>
+
 </resources>

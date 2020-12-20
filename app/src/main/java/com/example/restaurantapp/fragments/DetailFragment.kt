@@ -4,15 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,14 +21,14 @@ import com.example.restaurantapp.model.Restaurant
 import com.example.restaurantapp.model.RestaurantImages
 import com.example.restaurantapp.viewmodel.RestaurantViewModel
 import com.example.restaurantapp.viewmodel.UserViewModel
-import java.util.jar.Manifest
 
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
+    private lateinit var recyclerView: RecyclerView
+
     private val restaurantViewModel: RestaurantViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
-    private lateinit var recyclerView: RecyclerView
 
     private val restaurantImageUri: MutableLiveData<Uri> = MutableLiveData()
     private lateinit var restaurantImageByteArray: ByteArray
@@ -43,10 +40,12 @@ class DetailFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
 
+        // when the user presses the button
         binding.addImageToRestaurant.setOnClickListener{
             pickImageFromGallery()
         }
 
+        // when the picked image is loaded, we uploaded to the restaurant
         restaurantImageUri.observe(viewLifecycleOwner) {
             val inputStream = activity?.contentResolver?.openInputStream(it)
             restaurantImageByteArray = inputStream!!.readBytes()
@@ -56,12 +55,14 @@ class DetailFragment : Fragment() {
             restaurantViewModel.addImageToRestaurant(newRestaurantImage)
         }
 
+        // initialize the recyclerview with the restaurant images
         recyclerView = binding.restaurantImages
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
         val adapter = RestaurantImageAdapter(listOf(), binding.root.context, userViewModel, restaurantViewModel)
         recyclerView.adapter = adapter
 
+        // when the current restaurant is loaded, set up the UI
         restaurantViewModel.currentRestaurant.observe(viewLifecycleOwner) {
             if(it != null) {
                 changeUI(it)
@@ -69,10 +70,11 @@ class DetailFragment : Fragment() {
         }
 
         restaurantViewModel.restaurantImages.observe(viewLifecycleOwner) {
-
+            // getting the images from the current restaurant
             val restaurantImages = it?.filter { res ->
                 res.restaurantId == restaurantViewModel.currentRestaurant.value?.id
             }
+            // if there are no images, we set the placeholder for the image
             if(restaurantImages!!.isEmpty()) {
                 val placeholder = RestaurantImages(-1, -1, -1, byteArrayOf())
                 adapter.setData(listOf(placeholder))
@@ -82,6 +84,7 @@ class DetailFragment : Fragment() {
             }
         }
 
+        // calling the maps activity, providing the needed information
         binding.mapsButton.setOnClickListener {
             val currentRestaurant = restaurantViewModel.currentRestaurant.value!!
             val intent = Intent(context, MapsActivity::class.java).apply {
@@ -92,6 +95,7 @@ class DetailFragment : Fragment() {
             startActivity(intent)
         }
 
+        // calling the restaurant
         binding.callButton.setOnClickListener {
             val currentRestaurant = restaurantViewModel.currentRestaurant.value!!
             val intent = Intent(Intent.ACTION_DIAL)
@@ -103,9 +107,8 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    // set the UI based on the given restaurant attributes
     private fun changeUI(restaurant: Restaurant) {
-
-
         binding.restaurantTitle.text = restaurant.name
         binding.restaurantAddress.text = restaurant.address
         binding.restaurantCountry.text = restaurant.country
@@ -115,6 +118,7 @@ class DetailFragment : Fragment() {
         binding.restaurantReserve.text = restaurant.reserve_url
     }
 
+    // function for select an image from the device
     private fun pickImageFromGallery() {
         //Intent to pick image
         val intent = Intent(Intent.ACTION_PICK)

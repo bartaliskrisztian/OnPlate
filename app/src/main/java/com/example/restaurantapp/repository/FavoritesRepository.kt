@@ -3,7 +3,6 @@ package com.example.restaurantapp.repository
 import androidx.lifecycle.LiveData
 import com.example.restaurantapp.db.FavoritesDao
 import com.example.restaurantapp.model.FavoriteRestaurants
-import com.example.restaurantapp.model.Restaurant
 
 class FavoritesRepository(private val favoritesDao: FavoritesDao) {
 

@@ -14,39 +14,53 @@
         android:id="@+id/removeFavoriteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginTop="20dp"
+
         android:fontFamily="serif"
-        android:text="Do you want to remove it from the favorites?"
+        android:text="@string/removeFavoritesQuestionText"
         android:textSize="14sp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/removeFavoriteButton"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+
         android:layout_marginStart="12dp"
         android:layout_marginTop="20dp"
+
         android:background="@drawable/button_layout"
+
         android:fontFamily="serif"
-        android:text="Yes"
+        android:text="@string/yesText"
         android:textColor="@color/white"
+
         app:layout_constraintStart_toStartOf="@+id/removeFavoriteText"
-        app:layout_constraintTop_toBottomOf="@+id/removeFavoriteText" />
+        app:layout_constraintTop_toBottomOf="@+id/removeFavoriteText"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dismissButton"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
+
         android:background="@drawable/button_layout"
+
         android:fontFamily="serif"
-        android:text="No"
+        android:text="@string/noText"
         android:textColor="@color/white"
+
         app:layout_constraintEnd_toEndOf="@+id/removeFavoriteText"
-        app:layout_constraintTop_toBottomOf="@+id/removeFavoriteText" />
+        app:layout_constraintTop_toBottomOf="@+id/removeFavoriteText"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,7 +5,6 @@ import com.example.restaurantapp.model.Countries
 
 class CountryRepository(private val countryDao: CountryDao) {
 
-    suspend fun addCountry(countries: Countries) = countryDao.addCountry(countries)
     suspend fun addCountries(countries: List<String>) {
         countries.forEach{
             val newCountry = Countries(0, it)

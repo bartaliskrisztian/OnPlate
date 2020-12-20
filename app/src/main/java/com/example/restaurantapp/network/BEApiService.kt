@@ -20,7 +20,6 @@ interface BEApiService {
 
     @GET("countries")
     fun getCountries(): Call<ApiCountryResponse>
-
 }
 
 object BEApi {

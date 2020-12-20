@@ -1,7 +1,6 @@
 package com.example.restaurantapp.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
 class UserViewModel(application: Application): AndroidViewModel(application) {
 
     lateinit var users: LiveData<List<User>>
-    val repository: UserRepository
+    private val repository: UserRepository
     var usedUser =  MutableLiveData<User>()
     var currentUser =  MutableLiveData<User>()
 
@@ -65,12 +64,4 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
             repository.addUser(user)
         }
     }
-
-    // removing a user from the db
-    fun deleteUser(user: User) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteUserByID(user.uid)
-        }
-    }
-
 }

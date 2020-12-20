@@ -13,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.restaurantapp.R
 import com.example.restaurantapp.databinding.FragmentLoginBinding
-import com.example.restaurantapp.model.User
 import com.example.restaurantapp.viewmodel.UserViewModel
 import java.security.MessageDigest
 
@@ -39,12 +38,9 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener{
             //binding.progressCircular.visibility = View.VISIBLE
             login()
-            userViewModel.repository.users.value?.forEach{
-                Log.d("-----", "${it.username} ${it.email}")
-            }
-            //Navigation.findNavController(requireView()).navigate(R.id.splashFragment)
         }
 
+        // when the user wants to register, navigate to the register fragment
         binding.toRegisterText.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -52,6 +48,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    // function for logging in
     private fun login() {
         val username = binding.loginUsernameText.text.toString()
         val password = binding.loginPasswordText.text.toString()
@@ -65,12 +62,15 @@ class LoginFragment : Fragment() {
 
         binding.progressCircular.visibility = View.VISIBLE
 
+        // when the users loaded from the db (users with the given username or email)
         userViewModel.usedUser.observe(viewLifecycleOwner, { user ->
+            // it it's null, it means that there is no user with the given username or email
             if(user == null) {
                 Log.d("-----", "$user")
                 Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_SHORT).show()
                 binding.progressCircular.visibility = View.GONE
             }
+            // if there is a match, we save out the username, email, password in shared preferences
             else{
                 Log.d("-----", "$user")
                 val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return@observe
@@ -82,6 +82,7 @@ class LoginFragment : Fragment() {
                     sharedPrefEdit.putString("password", user.password)
                     sharedPrefEdit.apply()
                 }
+                // navigating to the main screen
                 userViewModel.currentUser.value = user
                 Toast.makeText(context, "Successful login", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_loginFragment_to_listFragment)
@@ -90,6 +91,7 @@ class LoginFragment : Fragment() {
         userViewModel.getUsersForLogin(username, sha256(password))
     }
 
+    // function for validating the user inputs
     private fun validateFormat(username: String, password: String): Boolean {
         if(username.isEmpty()) {
             binding.loginUsernameText.error = "Type in your username"

@@ -58,12 +58,18 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
 
     override fun onBindViewHolder(holder: FavoritesListAdapter.RestaurantListHolder, position: Int) {
         val currentItem = restaurants[position].restaurant
+
+        // we hide the favorite button, because here the user can remove the favorite with long click
         holder.itemView.findViewById<ImageButton>(R.id.favoriteButton).visibility = View.GONE
+
         val restaurantImage = holder.itemView.findViewById<ImageView>(R.id.restaurantImage)
+
+        // set the UI based on the current item's attributes
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
 
+        // if there is a picture uploaded to the restaurant, we load it into the ImageView, else we load the image returned by BE
         val tempByteArray = restaurantImage(currentItem.id)
         val image = if(tempByteArray.isEmpty()) {
             currentItem.image_url
@@ -72,9 +78,6 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
             tempByteArray
         }
         Glide.with(context).load(image).into(restaurantImage)
-
-
-
     }
 
     override fun getItemCount(): Int = restaurants.size
@@ -84,18 +87,20 @@ RecyclerView.Adapter<FavoritesListAdapter.RestaurantListHolder>() {
         fun onItemLongClick(position: Int)
     }
 
+    // on data change we set the new list of restaurants
     fun setData(pRestaurants: List<FavoriteRestaurants>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
     }
 
+    // function for loading one image uploaded to the restaurant
     private fun restaurantImage(restaurantId: Int): ByteArray {
         restaurantViewModel.restaurantImages.value?.forEach {
             if(it.restaurantId == restaurantId) {
                 return it.image
             }
         }
+        // if there is no image uploaded to the restaurant, we return an empty byteArray
         return byteArrayOf()
     }
-
 }

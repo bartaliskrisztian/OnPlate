@@ -2,7 +2,6 @@ package com.example.restaurantapp.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,7 +47,10 @@ class RestaurantListAdapter(
 
     override fun onBindViewHolder(holder: RestaurantListHolder, position: Int) {
         val currentItem = restaurants[position]
+
         val restaurantImage = holder.itemView.findViewById<ImageView>(R.id.restaurantImage)
+
+        // set the UI based on the current item's attributes
         holder.itemView.findViewById<TextView>(R.id.restaurantTitle).text = currentItem.name
         holder.itemView.findViewById<TextView>(R.id.restaurantAddress).text = currentItem.address
         holder.itemView.findViewById<TextView>(R.id.restaurantPrice).text = currentItem.price.toString()
@@ -73,12 +75,15 @@ class RestaurantListAdapter(
 
         favoriteButton.setOnClickListener{
             val userId = userViewModel.currentUser.value!!.uid
-            if(isFavorite) { // if the restaurant is the user's favorite, then we remove it from the favorites
+            // if the restaurant is the user's favorite, then we remove it from the favorites
+            if(isFavorite) {
+                // changing the color of favorite button based on if the restaurant is favorite or not
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black))
                 favoritesViewModel.removeFavorite(userId, currentItem.id)
                 notifyDataSetChanged()
             }
-            else { // if the restaurant is not the user's favorite yet, then we add it to the favorites
+            // if the restaurant is not the user's favorite yet, then we add it to the favorites
+            else {
                 favoriteButton.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.appBackgroundColor))
                 val newFavorite = FavoriteRestaurants(0, userId, currentItem.id, currentItem)
                 favoritesViewModel.addFavorite(newFavorite)
@@ -93,11 +98,13 @@ class RestaurantListAdapter(
         fun onItemClick(position: Int)
     }
 
+    // on data change we set the new list of restaurants
     fun setData(pRestaurants: List<Restaurant>) {
         restaurants = pRestaurants
         notifyDataSetChanged()
     }
 
+    // function for checking if the current restaurant is favorite for the user or not
     private fun restaurantIsFavorite(restaurantId: Int, userId: Int): Boolean {
         favoritesViewModel.favorites.value?.forEach {
             if(it.restaurantId == restaurantId && it.userId == userId) {
@@ -107,6 +114,7 @@ class RestaurantListAdapter(
         return false
     }
 
+    // function for loading one image uploaded to the restaurant
     private fun restaurantImage(restaurantId: Int): ByteArray {
         restaurantViewModel.restaurantImages.value?.forEach {
             if(it.restaurantId == restaurantId) {

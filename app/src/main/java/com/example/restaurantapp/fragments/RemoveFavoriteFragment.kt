@@ -1,7 +1,6 @@
 package com.example.restaurantapp.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.example.restaurantapp.viewmodel.UserViewModel
 class RemoveFavoriteFragment : DialogFragment() {
 
     private lateinit var binding: FragmentRemoveFavoriteBinding
+
     private val favoritesViewModel: FavoritesViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
 
@@ -25,6 +25,7 @@ class RemoveFavoriteFragment : DialogFragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_remove_favorite, container, false)
 
+        // if the user presses the remove button, we remove the favorite from the db
         binding.removeFavoriteButton.setOnClickListener {
             val favoriteId = favoritesViewModel.currentFavorite.value?.restaurantId
             val userId = userViewModel.currentUser.value?.uid
@@ -38,6 +39,4 @@ class RemoveFavoriteFragment : DialogFragment() {
 
         return binding.root
     }
-
-
 }

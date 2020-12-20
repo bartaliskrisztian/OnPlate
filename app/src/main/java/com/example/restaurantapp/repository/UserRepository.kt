@@ -1,6 +1,5 @@
 package com.example.restaurantapp.repository
 
-import androidx.lifecycle.LiveData
 import com.example.restaurantapp.db.UserDao
 import com.example.restaurantapp.model.User
 

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,15 +22,17 @@ import java.security.MessageDigest
 
 class RegisterFragment : Fragment() {
 
-    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var binding: FragmentRegisterBinding
+
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private lateinit var username: String
     private lateinit var email: String
-    private lateinit var password: String
-    private lateinit var passwordAgain: String
     private lateinit var address: String
     private lateinit var phoneNumber: String
+    private lateinit var password: String
+    private lateinit var passwordAgain: String
+
     private lateinit var imageUri: Uri
     private lateinit var imageByteArray: ByteArray
 
@@ -73,12 +74,9 @@ class RegisterFragment : Fragment() {
         address = binding.registerUserAddressText.text.toString()
         phoneNumber = binding.registerUserPhoneText.text.toString()
 
-        if(imageUri != null) {
+        imageByteArray = run {
             val inputStream = activity?.contentResolver?.openInputStream(imageUri)
-            imageByteArray = inputStream!!.readBytes()
-        }
-        else {
-            imageByteArray = byteArrayOf()
+            inputStream!!.readBytes()
         }
 
         val format = validateFormat(username, email, password, passwordAgain)
@@ -90,14 +88,16 @@ class RegisterFragment : Fragment() {
 
         binding.progressCircular.visibility = View.VISIBLE
 
-        // if already exists a user with the given username or password
+        // when the users are loaded with the given username or password
         userViewModel.usedUser.observe(viewLifecycleOwner, { user ->
+            // if the username or email is not used by other user, we save out the information on shared preferences
             if(user == null) {
                 val passwordHash = sha256(password)
                 val newUser = User(0, username, email, passwordHash, address, phoneNumber, imageByteArray)
-                Log.d("aaaaa", "$newUser")
+
                 val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
                 val sharedPrefEdit = sharedPref.edit()
+
                 sharedPrefEdit.clear()
                 sharedPrefEdit.putString("username", username)
                 sharedPrefEdit.putString("email", email)
@@ -110,6 +110,7 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(context, "Successful registration", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_registerFragment_to_listFragment)
             }
+            // if already exists a user with the given username or password
             else{
                 Toast.makeText(context, "Username or email is already taken", Toast.LENGTH_SHORT).show()
                 binding.progressCircular.visibility = View.GONE
@@ -118,6 +119,7 @@ class RegisterFragment : Fragment() {
         userViewModel.getUsersForRegistration(username, email)
     }
 
+    // function for picking a profile image from the device
     private fun pickImageFromGallery() {
         //Intent to pick image
         val intent = Intent(Intent.ACTION_PICK)
@@ -145,7 +147,7 @@ class RegisterFragment : Fragment() {
             return false
         }
         // validate email
-        val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+        val emailRegex = "^[A-Za-z](.*)([@])(.+)(\\.)(.{1,})"
         if(!emailRegex.toRegex().matches(email)) {
             binding.registerEmailText.error = "Email format is not valid"
             return false

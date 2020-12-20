@@ -9,6 +9,5 @@ class ImageRepository(private val imagesDao: ImagesDao) {
     val images = imagesDao.getAllImages()
 
     suspend fun addImage(restaurantImages: RestaurantImages) = imagesDao.addImage(restaurantImages)
-    fun getAllImages(): LiveData<List<RestaurantImages>> = imagesDao.getAllImages()
     suspend fun deleteImage(imageId: Int) = imagesDao.deleteImage(imageId)
 }

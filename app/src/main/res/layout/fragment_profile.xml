@@ -12,9 +12,11 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal"
+
+            android:layout_marginTop="16dp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,8 +25,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
+
                 android:layout_margin="10dp"
                 android:layout_marginTop="32dp"
+
                 app:cardCornerRadius="60dp"
                 app:cardElevation="0dp">
 
@@ -33,10 +37,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_user"
-                    tools:ignore="ContentDescription" />
-
+                    android:contentDescription="@string/profileImageContentDescription"
+                    />
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
@@ -46,64 +51,85 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp"
-            android:drawableLeft="@drawable/ic_phone"
+
             android:drawablePadding="10dp"
+            app:drawableStartCompat="@drawable/ic_phone"
+
             android:fontFamily="serif"
-            android:text="Phone"
+            android:text="@string/detailPhonePlaceholder"
+
             app:layout_constraintStart_toStartOf="@+id/userAddressText"
-            app:layout_constraintTop_toBottomOf="@+id/userAddressText" />
+            app:layout_constraintTop_toBottomOf="@+id/userAddressText"
+            />
 
         <TextView
             android:id="@+id/userEmailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:drawableLeft="@drawable/ic_email"
+
+            app:drawableStartCompat="@drawable/ic_email"
             android:drawablePadding="10dp"
+
             android:fontFamily="serif"
-            android:text="Email"
+            android:text="@string/registerEmailText"
+
             app:layout_constraintStart_toStartOf="@+id/userNameText"
-            app:layout_constraintTop_toBottomOf="@+id/userNameText" />
+            app:layout_constraintTop_toBottomOf="@+id/userNameText"
+            />
 
         <TextView
             android:id="@+id/userNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginStart="40dp"
             android:layout_marginTop="8dp"
-            android:drawableLeft="@drawable/ic_name"
+
+            app:drawableStartCompat="@drawable/ic_name"
             android:drawablePadding="10dp"
+
             android:fontFamily="serif"
-            android:text="Name"
+            android:text="@string/namePlaceholder"
             android:textSize="30sp"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            />
 
         <TextView
             android:id="@+id/userAddressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:drawableLeft="@drawable/ic_address"
+
+            app:drawableStartCompat="@drawable/ic_address"
             android:drawablePadding="10dp"
+
             android:fontFamily="serif"
-            android:text="Address"
+            android:text="@string/detailAddressPlaceholder"
+
             app:layout_constraintStart_toStartOf="@+id/userEmailText"
-            app:layout_constraintTop_toBottomOf="@+id/userEmailText" />
+            app:layout_constraintTop_toBottomOf="@+id/userEmailText"
+            />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logoutButton"
             android:layout_width="84dp"
             android:layout_height="39dp"
             android:layout_marginTop="36dp"
+
             android:background="@drawable/button_layout"
+
             android:fontFamily="serif"
-            android:text="Logout"
+            android:text="@string/logoutText"
             android:textColor="@color/white"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userPhoneText" />
+            app:layout_constraintTop_toBottomOf="@+id/userPhoneText"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

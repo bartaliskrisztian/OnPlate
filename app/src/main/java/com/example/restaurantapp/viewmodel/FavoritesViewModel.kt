@@ -17,7 +17,7 @@ class FavoritesViewModel(application: Application): AndroidViewModel(application
 
     private val repository: FavoritesRepository // repo for communicating with the db
     var favorites: LiveData<List<FavoriteRestaurants>> // list for storing all favorites from the users
-    var currentFavorite: MutableLiveData<FavoriteRestaurants> = MutableLiveData()
+    var currentFavorite: MutableLiveData<FavoriteRestaurants> = MutableLiveData() // the current restaurant
 
     init {
         val favoritesDao = RestaurantDatabase.getDatabase(application).favoritesDao()

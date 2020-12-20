@@ -52,6 +52,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    // set up the UI based on the current user attributes
     private fun setupUI() {
         Glide.with(requireActivity()).load(user.image).into(binding.profilePic)
         binding.userNameText.text = user.username

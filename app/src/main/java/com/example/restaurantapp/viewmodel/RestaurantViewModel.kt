@@ -21,7 +21,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
+@Suppress("ControlFlowWithEmptyBody")
 class RestaurantViewModel(application: Application): AndroidViewModel(application) {
     var restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData() // all restaurants loaded from the db
     var restaurantsFromCountry: MutableLiveData<List<Restaurant>> = MutableLiveData() // restaurants filtered by the current state
@@ -105,7 +107,7 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
 
         result.value = result.value?.filter {
             //it.name.contains(searchQuery.value!!)
-            it.name.toLowerCase().matches("^${searchQuery.value!!.toLowerCase()}.*".toRegex())
+            it.name.toLowerCase(Locale.ROOT).matches("^${searchQuery.value!!.toLowerCase(Locale.ROOT)}.*".toRegex())
         }
 
         if(favorites.isNotEmpty() && showFavorites.value!!) {
@@ -221,42 +223,6 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
                      while (page != pageC + 1) {}
                  }
              }
-             /*
-             val newRestaurant1 = Restaurant(0,
-                     "Pizza 21",
-                     "Street 23.",
-                     "New York",
-                     "AW",
-                     "New York",
-                     "535600",
-                     "AW",
-                     "0695994",
-                     41.935137,
-                     -87.662815,
-                     2,
-                     "http://www.opentable.com/single.aspx?rid=107257",
-                     "http://mobile.opentable.com/opentable/?restId=107257",
-                     "https://www.opentable.com/img/restimages/107257.jpg"
-             )
-             val newRestaurant2 = Restaurant(1,
-                     "Factory",
-                     "Street 98.",
-                     "Las Vegas",
-                     "AW",
-                     "Las Vegas",
-                     "535600",
-                     "AW",
-                     "0695994",
-                     41.933737,
-                     -77.662815,
-                     4,
-                     "http://www.opentable.com/single.aspx?rid=107257",
-                     "http://mobile.opentable.com/opentable/?restId=107257",
-                     "https://www.opentable.com/img/restimages/107257.jpg"
-             )
-             repository.addMultipleRestaurants(listOf(newRestaurant1, newRestaurant2))
-
-              */
              dataLoadedFromApi.postValue(true)
          }
     }
@@ -293,5 +259,4 @@ class RestaurantViewModel(application: Application): AndroidViewModel(applicatio
         }
         restaurantCount = result
     }
-
 }
