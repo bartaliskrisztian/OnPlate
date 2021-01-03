@@ -80,4 +80,11 @@ Here you can see and manage your own profile and can log out.
 
 ## Project structure
 
-*activities
+* activities
+* adapters
+* db
+* fragments
+* model
+* network
+* repository
+* viewmodel
