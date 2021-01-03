@@ -77,3 +77,7 @@ placeholder.
 Here you can see and manage your own profile and can log out.
 
 <img src="images/profile.jpg" alt="Profile Fragment" height="500" width="270"/>
+
+## Project structure
+
+*activities
